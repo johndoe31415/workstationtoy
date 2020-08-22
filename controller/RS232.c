@@ -20,48 +20,16 @@ ISR(USART1_RX_vect) {
 	volatile uint8_t data = UDR1;
 	(void)data;
 	switch (data) {
-		
+
 		case 'a':
 			mprintf("GetFPKey:\r\n");
 			getFrontpanelKey();
 			break;
-		
+
 		case 'w':
 			ledTest();
 			break;
-		
-		
 	};
-#if 0
-	if (data == 'q') {
-		struct fpCmd_SetLEDPattern cmd;
-		cmd.master.cmdId = FP_SETLEDPATTERN_CMDID;
-		cmd.master.ledIndex = LED_OPERATION;
-		cmd.master.patternRed = 0xffff;
-		cmd.master.patternGreen = 0;
-		selectSPISource(FRONTPANEL_NORMAL);		
-		spiTransmit(&cmd, sizeof(cmd));
-		deselectSPI();
-	} else if (data == 'w') {
-		struct fpCmd_SetLEDPattern cmd;
-		cmd.master.cmdId = FP_SETLEDPATTERN_CMDID;
-		cmd.master.ledIndex = LED_OPERATION;
-		cmd.master.patternRed = 0;
-		cmd.master.patternGreen = 0xffff;
-		selectSPISource(FRONTPANEL_NORMAL);		
-		spiTransmit(&cmd, sizeof(cmd));
-		deselectSPI();
-	} else if (data == 'a') {
-		struct fpCmd_GetLEDPattern cmd;
-		memset(&cmd, 0, sizeof(cmd));
-		cmd.master.cmdId = FP_GETLEDPATTERN_CMDID;
-		cmd.master.ledIndex = LED_ERROR;
-		selectSPISource(FRONTPANEL_NORMAL);		
-		spiTransmitWithPause(&cmd, sizeof(cmd), FP_GETLEDPATTERN_MASTERLEN, FP_GETLEDPATTERN_DELAY_US);		
-		deselectSPI();
-		mprintf("Result: red=%x green=%x\r\n", cmd.slave.patternRed, cmd.slave.patternGreen);
-	}
-#endif
 }
 
 static void initRs232Stdout(void) {

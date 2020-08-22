@@ -10,16 +10,8 @@ OBJS := \
 	Buzzer.o \
 	Debug.o \
 	Delay.o \
-	EEPROM.o \
-	Errors.o \
 	Frontpanel.o \
 	GUI.o \
-	IntegrityCheck.o \
-	md5-asm.o \
-	Panic.o \
-	PayloadCurrentMonitor.o \
-	PayloadFrontpanel.o \
-	PayloadVoltageMonitor.o \
 	$(PROJNAME).o \
 	RelaySwitcher.o \
 	RS232.o \
