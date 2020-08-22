@@ -21,6 +21,10 @@ flashing lights and it's got all that.
 I'm still pushing all the code from 2012 to Github so that if I am interested
 one day I can go back in the history and see how I've done stuff.
 
+## Processors
+The frontpanel (which handles key presses and LED indicators) runs an ATmega8.
+The core processor is an AVR128CAN.
+
 ## License
 GNU GPL-3. There's one dependency in the original files from AVR-Crypto-Lib,
 which I used for self-verification of firmware integrity (also GPL-3).
