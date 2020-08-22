@@ -16,7 +16,6 @@ OBJS := \
 	GUI.o \
 	IntegrityCheck.o \
 	md5-asm.o \
-	Mega8Programmer.o \
 	Panic.o \
 	PayloadCurrentMonitor.o \
 	PayloadFrontpanel.o \

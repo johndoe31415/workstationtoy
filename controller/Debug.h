@@ -8,9 +8,9 @@
 
 #include "TimeKeeper.h"
 
-#define mprintf(msg, ...)			printf_P(PSTR(msg), ## __VA_ARGS__)
+#define mprintf(msg, ...)
 
-#define softassert(cond)			if (!(cond)) { softassertionFail(PSTR(#cond), PSTR(__FILE__), __LINE__); }
+#define softassert(cond)
 
 #define logmsg(msg, ...)			logmsg_P(PSTR(msg), ## __VA_ARGS__)
 
