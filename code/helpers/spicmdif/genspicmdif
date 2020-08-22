@@ -1,0 +1,8 @@
+#!/usr/bin/python3
+import sys
+from SPICmdIf import SPICmdIf
+from Generator import Generator
+
+spicmds = SPICmdIf(sys.argv[1])
+generator = Generator(spicmds)
+generator.generate()

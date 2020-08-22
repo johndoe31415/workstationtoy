@@ -1,0 +1,5 @@
+#!/bin/bash
+
+./genspicmdif frontpanel.xml 
+/home/joe/bin/avrgcc/bin/avr-gcc -c -DSPI_SLAVE -mmcu=atmega8 -I out -o out/SPISlave.o out/SPISlave.c
+#/home/joe/bin/avrgcc/bin/avr-gcc -c -DSPI_SLAVE -mmcu=atmega8 -I out -o out/SPIMaster.o out/SPIMaster.c

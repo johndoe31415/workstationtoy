@@ -1,0 +1,56 @@
+#!/usr/bin/python3
+import os
+import hashlib
+import struct
+from collections import namedtuple
+
+params = {
+	"infile":		"controller.bin",
+	"outfile":		"eeprom.bin",
+	"version":		1,
+	"pagesize":		256,
+}
+
+
+structfmt = [
+	("version",		"H"),
+	("pages",		"H"),
+	("flashmd5",	"16s"),
+	("eeprommd5",	"16s"),
+]
+
+def filesize(filename):
+	return os.stat(filename).st_size
+
+def pagesize(filename):
+	return (filesize(filename) + params["pagesize"] - 1) // params["pagesize"]
+
+fmtstr = "<" + " ".join([ y for (x, y) in structfmt ])
+structure = struct.Struct(fmtstr)
+size = structure.size
+emptydata = bytes([ 0 ] * size)
+
+unpacked = structure.unpack(emptydata)
+unpacked = { structfmt[i][0]: unpacked[i] for i in range(len(structfmt)) }
+
+# Now fill with data
+unpacked["version"] = params["version"]
+unpacked["pages"] = pagesize(params["infile"])
+flashbin = open(params["infile"], "rb").read()
+padsize = (unpacked["pages"] * params["pagesize"]) - len(flashbin)
+flashbin = flashbin + bytes([ 0xff ] * padsize)
+unpacked["flashmd5"] = hashlib.md5(flashbin).digest()
+
+# And recode
+packed = [ unpacked[structfmt[i][0]] for i in range(len(structfmt)) ]
+binpacked = structure.pack(*packed)
+
+# Then generate hash
+unpacked["eeprommd5"] = hashlib.md5(binpacked[:-16]).digest()
+print(unpacked)
+
+# And recode again
+packed = [ unpacked[structfmt[i][0]] for i in range(len(structfmt)) ]
+binpacked = structure.pack(*packed)
+
+open(params["outfile"], "wb").write(binpacked)

@@ -1,0 +1,74 @@
+<?xml version=""?>
+<commands>
+	<properties>
+		<cmdprefix value="fpCmd_" />
+		<enumprefix value="fpEnum_" />
+		<includeguard value="SPISLAVEFP" />
+		<defineprefix value="FP_" />
+		<slavename value="FRONTPANEL" />
+	</properties>
+
+	<enum name="ledIndex" prefix="LED_">
+		<element name="Operation" />
+		<element name="Error" />
+		<element name="Automatic_Shutdown" />
+		<element name="Temperature" />
+		<element name="Protective_Earth" />
+		<element name="Phase_Error" />
+		<element name="Overcurrent" />
+		<element name="Auto_Transformer" />
+		<element name="Isolation_Transformer" />
+		<element name="Output" />
+	</enum>
+	
+	<enum name="keyboardEvent" prefix="KBD_EVENT_">
+		<element name="None" />
+		<element name="Press_Short" />
+		<element name="Press_Medium" />
+		<element name="Press_Long" />
+	</enum>
+	
+	<enum name="keyboardKey" prefix="KBD_KEY_">
+		<element name="Dead_Man" value="0" />
+		<element name="Auto_Transformer" value="1" />
+		<element name="Isolation_Transformer" value="2" />
+		<element name="Output" value="3" />
+		<element name="None" />
+	</enum>
+	
+	<command name="GetLEDPattern">
+		<mastertx name="ledIndex" type="ledIndex" />
+		<slavetx name="patternRed" type="uint16" />
+		<slavetx name="patternGreen" type="uint16" />
+	</command>
+		
+	<command name="SetLEDPattern">
+		<mastertx name="ledIndex" type="ledIndex" />
+		<mastertx name="patternRed" type="uint16" />
+		<mastertx name="patternGreen" type="uint16" />
+	</command>
+	
+	<command name="SetAllLEDPattern">
+		<mastertx name="patternRed" type="uint16" />
+		<mastertx name="patternGreen" type="uint16" />
+	</command>
+	
+	<command name="GetTiming">
+		<slavetx name="timerMaxValue" type="uint8" />
+	</command>
+	
+	<command name="SetTiming">
+		<mastertx name="timerMaxValue" type="uint8" />
+	</command>
+	
+	<command name="ReadKeyboard">
+		<slavetx name="keyboardEvent" type="keyboardEvent" />
+		<slavetx name="pressedKey" type="keyboardKey" />
+	</command>
+	
+	<command name="MultiplexerTest">
+		<mastertx name="writePattern" type="uint8[3]" />
+		<slavetx name="readPattern" type="uint8[3]" />
+	</command>
+</commands>
+

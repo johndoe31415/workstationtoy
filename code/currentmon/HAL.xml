@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<HAL>
+	<templates>
+		<template name="led">
+			<pin type="output" initialvalue="inactive" />
+			<activelow />
+		</template>
+
+		<template name="relais">
+			<pin type="output" initialvalue="inactive" />
+		</template>
+
+		<template name="diginput">
+			<pin type="input" initialpullup="active" />
+		</template>
+		
+		<template name="diginputinv">
+			<pin type="input" initialpullup="active" />
+			<activelow />
+		</template>
+		
+		<template name="digswitchinput">
+			<pin type="input" initialpullup="active" />
+			<activelow />
+		</template>
+		
+		<template name="digoutput">
+			<pin type="output" initialvalue="inactive" />
+		</template>
+		
+		<template name="digoutputinv">
+			<pin type="output" initialvalue="inactive" />
+			<activelow />
+		</template>
+		
+		<template name="digio">
+			<pin type="io" initialstate="input" initialpullup="inactive" />
+		</template>
+	</templates>
+
+
+	<portpin name="PB0" template="digoutput">
+		<description value="SignalIRQ" />
+	</portpin>
+	
+	<portpin name="PB4" template="digoutput">
+		<description value="MISO" />
+	</portpin>
+
+	<portpin name="PB3" template="diginput">
+		<description value="MOSI" />
+	</portpin>
+
+	<portpin name="PB2" template="diginputinv">
+		<description value="SS" />
+	</portpin>
+	
+	<portpin name="PB5" template="diginput">
+		<description value="SCK" />
+	</portpin>
+	
+	<portpin name="PD6" template="digoutput">
+		<description value="LEDYellow" />
+	</portpin>
+	<portpin name="PD7" template="digoutput">
+		<description value="LEDGreen" />
+	</portpin>
+	<portpin name="PD5" template="digoutput">
+		<description value="Debug" />
+	</portpin>
+</HAL>

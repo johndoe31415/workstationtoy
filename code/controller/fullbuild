@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+#
+
+generate_payload() {
+	PROJNAME="$1"
+	OUTFILE="$2"
+
+	pushd .
+	cd ../${PROJNAME}
+	rm -f SPISlave.c SPISlave.h
+	make SPISlave.c clean all
+	popd
+	if [ -f ../${PROJNAME}/${PROJNAME}.bin ]; then
+		./gen_payload ../${PROJNAME}/${PROJNAME}.bin "$OUTFILE"
+	else
+		echo "Error: Cannot generate ${PROJNAME} payload!"
+		exit 1
+	fi
+}
+
+generate_payload frontpanel Frontpanel
+generate_payload currentmon CurrentMonitor
+generate_payload voltagemon VoltageMonitor
+./gen_errors
+make "$@"

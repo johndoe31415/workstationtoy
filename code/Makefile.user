@@ -1,0 +1,22 @@
+AVR_TOOLCHAIN_DIRECTORY := /home/joe/bin/avr/
+AVR_LIBC_DIRECTORY := $(AVR_TOOLCHAIN_DIRECTORY)avr/
+#AVR_TOOLCHAIN_DIRECTORY := /usr/
+#AVR_LIBC_DIRECTORY := $(AVR_TOOLCHAIN_DIRECTORY)avr/
+
+CC := $(AVR_TOOLCHAIN_DIRECTORY)bin/avr-gcc
+NM := $(AVR_TOOLCHAIN_DIRECTORY)bin/avr-nm
+OBJCOPY := $(AVR_TOOLCHAIN_DIRECTORY)bin/avr-objcopy
+OBJDUMP := $(AVR_TOOLCHAIN_DIRECTORY)bin/avr-objdump
+SIZE := $(AVR_TOOLCHAIN_DIRECTORY)bin/avr-size
+STRIP := $(AVR_TOOLCHAIN_DIRECTORY)bin/avr-strip
+AVRDUDE := /usr/bin/avrdude
+
+HALGEN = /home/joe/Hardware/HALGen/halgen
+
+DATASHEET_DIRECTORY := /home/joe/Elektronik/Datasheets/files/uC/AVR/
+
+# Options for AVRDude
+#AVRDUDE_PGMR := stk500v2
+#AVRDUDE_OPTS := -V -P /dev/ttyACM0
+AVRDUDE_PGMR := avrispmkII
+AVRDUDE_OPTS := -V -P usb

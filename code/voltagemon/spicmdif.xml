@@ -1,0 +1,14 @@
+<?xml version=""?>
+<commands>
+	<properties>
+		<cmdprefix value="vmCmd_" />
+		<enumprefix value="vmEnum_" />
+		<includeguard value="SPISLAVEVM" />
+		<defineprefix value ="VM_" />
+	</properties>
+
+	<command name="TestSPI">
+		<mastertx name="challenge" type="uint8[8]" />
+		<slavetx name="response" type="uint8[8]" />
+	</command>
+</commands>
