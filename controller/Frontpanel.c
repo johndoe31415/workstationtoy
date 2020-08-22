@@ -5,7 +5,6 @@
 
 #include "Frontpanel.h"
 #include "SPI.h"
-#include "Debug.h"
 #include "Delay.h"
 
 struct ledPattern {
@@ -54,7 +53,7 @@ void setLED(enum fpEnum_ledIndex aLED, enum FrontpanelLEDState aState) {
 	cmd.master.ledIndex = aLED;
 	cmd.master.patternRed = pattern.red;
 	cmd.master.patternGreen = pattern.green;
-	
+
 	spiTransmitToSlave(SLAVE_FRONTPANEL, &cmd, sizeof(cmd), sizeof(cmd.master), FP_SETLEDPATTERN_DELAY_US);
 }
 
@@ -92,4 +91,3 @@ struct KeyboardEvent getFrontpanelKey(void) {
 	returnValue.key = cmd.slave.pressedKey;
 	return returnValue;
 }
-

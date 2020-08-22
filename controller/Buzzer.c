@@ -1,13 +1,13 @@
+#include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 
 #include "Delay.h"
 #include "Buzzer.h"
-#include "Debug.h"
-#include "TimeKeeper.h"
 
 #define UINT32(x)							((uint32_t)(x))
 #define ROUNDDIV(a, b)						(((a) + ((b) / 2)) / (b))
@@ -24,7 +24,6 @@ struct melody {
 	uint8_t toneCount;
 	struct tone tones[];
 };
-
 
 static uint8_t currentTone;
 static uint8_t currentRepetition;

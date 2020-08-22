@@ -8,15 +8,13 @@ MCU_UNIT := at90can128
 # Source files
 OBJS := \
 	Buzzer.o \
-	Debug.o \
 	Delay.o \
 	Frontpanel.o \
 	GUI.o \
 	$(PROJNAME).o \
 	RelaySwitcher.o \
 	RS232.o \
-	SPI.o \
-	TimeKeeper.o
+	SPI.o
 
 LIBOBJS :=
 
@@ -28,12 +26,3 @@ HALINPUT := HAL.xml
 #CFLAGS += -ffunction-sections
 #CFLAGS += -fdata-sections
 CFLAGS += -fmerge-all-constants
-
-# Link options
-#RELOCATE_BOOTLOADER_ADDR := 0x20000
-#LDFLAGS += -Wl,--defsym,bootloader=$(RELOCATE_BOOTLOADER_ADDR)
-#LDFLAGS += -Wl,--defsym,bootloaderQuery=0x20008
-#LDFLAGS += -Wl,--defsym,bootloaderSpm=0x20018
-#LDFLAGS += -Wl,--section-start=.bootloadertrampoline=$(RELOCATE_BOOTLOADER_ADDR)
-#LDFLAGS += -Wl,--section-start=.bootloader=0x20020
-#LDFLAGS += -Wl,--gc-sections

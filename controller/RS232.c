@@ -5,7 +5,6 @@
 
 #include "RS232.h"
 #include "HAL.h"
-#include "Debug.h"
 
 #include "../frontpanel/SPISlave.h"
 #include "SPI.h"
@@ -22,7 +21,6 @@ ISR(USART1_RX_vect) {
 	switch (data) {
 
 		case 'a':
-			mprintf("GetFPKey:\r\n");
 			getFrontpanelKey();
 			break;
 

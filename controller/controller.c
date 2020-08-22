@@ -8,9 +8,7 @@
 
 #include "Delay.h"
 #include "HAL.h"
-#include "Debug.h"
 #include "RS232.h"
-#include "TimeKeeper.h"
 #include "SPI.h"
 #include "Frontpanel.h"
 #include "Buzzer.h"
@@ -20,14 +18,8 @@
 int main() {
 	initHAL();
 	initRs232();
-	initTimekeeper();
 	initSPI();
 	initBuzzer();
-
-	logmsg("Device reset\r\n");
-
-	/* Check integrity of EEPROM and flash itself */
-	logmsg("EEPROM and Flash memory of main unit intact.\r\n");
 
 	/* Then activate interrupts */
 	sei();

@@ -1,11 +1,9 @@
 #include <string.h>
 
-#include "Debug.h"
 #include "GUI.h"
 #include "HAL.h"
 #include "Frontpanel.h"
 #include "RelaySwitcher.h"
-#include "TimeKeeper.h"
 #include "Delay.h"
 #include "Buzzer.h"
 
@@ -13,7 +11,7 @@ static struct GUIState state;
 
 static void handleKeypress(enum fpEnum_keyboardEvent aEventType, enum fpEnum_keyboardKey aKey) {
 	if (aKey == KBD_KEY_OUTPUT) {
-		if (state.outputState == OUTPUT_DISABLED) {			
+		if (state.outputState == OUTPUT_DISABLED) {
 			if (aEventType == KBD_EVENT_PRESS_LONG) {
 				state.outputState = OUTPUT_PERMANENTLY_ENABLED;
 			} else {
@@ -38,7 +36,7 @@ static void handleKeypress(enum fpEnum_keyboardEvent aEventType, enum fpEnum_key
 		}
 	}
 	state.autoShutdownState = (state.autoShutdownState == AUTOSHTDN_DISABLED) ? AUTOSHTDN_DISABLED : AUTOSHTDN_IDLE;
-	state.lastUpdateTime = getTimeSeconds();
+	//state.lastUpdateTime = getTimeSeconds();
 }
 
 static bool handleFootpedal(bool aFootPedalState) {
@@ -48,7 +46,7 @@ static bool handleFootpedal(bool aFootPedalState) {
 			state.footPedalState = aFootPedalState;
 			event = true;
 		}
-	} 
+	}
 	return event;
 }
 
@@ -90,7 +88,7 @@ static void updateFrontpanelLEDs(void) {
 static void updateStateMachine(void) {
 	enum SwitchState currentState;
 	currentState = SWST_PWR_ON_IDLE;
-	
+
 	if (state.autoShutdownState != AUTOSHTDN_SHUTTINGDOWN) {
 		bool outputEnabled = (state.outputState == OUTPUT_PERMANENTLY_ENABLED) || ((state.outputState == OUTPUT_ARMED) && state.footPedalState);
 		if (state.isoEnabled && state.autoEnabled) {
@@ -109,26 +107,6 @@ static void updateStateMachine(void) {
 	relaySwitchState(currentState);
 }
 
-static bool checkTime(void) {
-	bool event = false;
-	uint32_t lastUpdate = getTimeSeconds() - state.lastUpdateTime;
-	if (state.autoShutdownState == AUTOSHTDN_IDLE) {
-		if (lastUpdate >= AUTOSHUTDOWN_TIMEOUT_SECONDS) {
-			buzzerPlay(BUZZER_NOTIFICATION);
-			state.autoShutdownState = AUTOSHTDN_PENDING;
-			event = true;
-			logmsg("Issuing shutdown warning after %lu seconds\r\n", lastUpdate);
-		}
-	} else if (state.autoShutdownState == AUTOSHTDN_PENDING) {
-		if (lastUpdate >= AUTOSHUTDOWN_TIMEOUT_SECONDS + AUTOSHUTDOWN_TIMEOUT_GRACETIME_SECONDS) {
-			state.autoShutdownState = AUTOSHTDN_SHUTTINGDOWN;
-			event = true;
-			logmsg("Issuing shutdown after %lu seconds\r\n", lastUpdate);
-		}
-	}
-	return event;
-}
-
 void guiLoop(void) {
 	memset(&state, 0, sizeof(state));
 	state.outputState = OUTPUT_ARMED;	/* TODO REMOVEME */
@@ -141,12 +119,9 @@ void guiLoop(void) {
 		if (Frontpanel_IRQ_IsActive()) {
 			struct KeyboardEvent keyPressEvent = getFrontpanelKey();
 			handleKeypress(keyPressEvent.eventType, keyPressEvent.key);
-			logmsg("Keypress type 0x%x, key 0x%x\r\n", keyPressEvent.eventType, keyPressEvent.key);
+			//logmsg("Keypress type 0x%x, key 0x%x\r\n", keyPressEvent.eventType, keyPressEvent.key);
 			event = true;
 		}
-	
-
-		event = checkTime() || event;
 
 		if (event) {
 			updateFrontpanelLEDs();
@@ -156,4 +131,3 @@ void guiLoop(void) {
 		delayMillis(10);
 	}
 }
-

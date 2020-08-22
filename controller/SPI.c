@@ -1,13 +1,14 @@
+#include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
 
 #include <util/crc16.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 
 #include "SPI.h"
 #include "HAL.h"
-#include "Debug.h"
 #include "Delay.h"
 
 #define DEBUG_SPI_TRANSMITS
@@ -39,7 +40,6 @@ static void spiSetSpeed(enum SPISpeed aSpeed) {
 }
 
 void spiDeselect(void) {
-	softassert(selectedEndpoint.slave != SLAVE_NONE);
 	Frontpanel_SS_SetInactive();
 	Frontpanel_RESET_SetInactive();
 	VoltageMonitor_SS_SetInactive();
@@ -55,9 +55,6 @@ struct SPIEndpoint spiGetCurrentEndpoint(void) {
 }
 
 void spiSelectSlave(enum SPISlave aSlave, enum SPIAccessMode aMode, enum SPISpeed aSpeed) {
-	if (selectedEndpoint.slave != SLAVE_NONE) {
-		logmsg("SPI race condition detected: Currently selected %S, but %S requested\r\n", spiGetSlaveName(selectedEndpoint.slave), spiGetSlaveName(aSlave));
-	}
 	savedSREGRegister = SREG;
 	cli();
 
@@ -77,10 +74,10 @@ void spiSelectSlave(enum SPISlave aSlave, enum SPIAccessMode aMode, enum SPISpee
 				CurrentMonitor_SS_SetActive();
 			}
 			break;
-		
+
 		case SLAVE_VOLTAGEMON:
 			if (aMode == SPIACCESS_PGM) {
-				VoltageMonitor_RESET_SetActive();				
+				VoltageMonitor_RESET_SetActive();
 			} else {
 				VoltageMonitor_SS_SetActive();
 			}
@@ -114,22 +111,8 @@ void spiTransmit(void *aData, uint8_t aLength) {
 }
 
 void spiTransmitWithPause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteCount, uint16_t aDelayMicros) {
-	softassert(selectedEndpoint.slave != SLAVE_NONE);
-#ifdef DEBUG_SPI_TRANSMITS
-	if ((selectedEndpoint.slave == SLAVE_FRONTPANEL) && (selectedEndpoint.mode == SPIACCESS_OPERATION)) {
-		mprintf("SPI TX %2d: ", aLength);
-		for (uint16_t i = 0; i < aLength; i++) {
-			if (i == aPauseAfterByteCount) {
-				mprintf("| ");
-			}
-			mprintf("%02x ", ((uint8_t*)aData)[i]);
-		}
-		mprintf("\r\n");
-	}
-#endif
-
 	uint8_t *data = (uint8_t*)aData;
-	for (uint8_t i = 0; i < aLength; i++) {		
+	for (uint8_t i = 0; i < aLength; i++) {
 		if (i == aPauseAfterByteCount) {
 			delayMicroseconds(aDelayMicros);
 		}
@@ -139,18 +122,6 @@ void spiTransmitWithPause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteC
 		}
 		delayMicroseconds(15);
 	}
-#ifdef DEBUG_SPI_TRANSMITS
-	if ((selectedEndpoint.slave == SLAVE_FRONTPANEL) && (selectedEndpoint.mode == SPIACCESS_OPERATION)) {
-		mprintf("SPI RX   : ", aLength);
-		for (uint16_t i = 0; i < aLength; i++) {
-			if (i == aPauseAfterByteCount) {
-				mprintf("| ");
-			}
-			mprintf("%02x ", ((uint8_t*)aData)[i]);
-		}
-		mprintf("\r\n");
-	}
-#endif
 }
 
 static uint16_t crcByte(uint16_t aCRC, uint8_t aDataByte) {

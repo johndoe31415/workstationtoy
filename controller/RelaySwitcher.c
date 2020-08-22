@@ -5,7 +5,6 @@
 #include "RelaySwitcher.h"
 #include "HAL.h"
 #include "Delay.h"
-#include "Debug.h"
 
 #define RELAY_DISABLE_ALL
 
@@ -31,7 +30,6 @@ static void switchState(enum SwitchState aNewState) {
 
 	uint16_t relayState;
 	memcpy_P(&relayState, switchOutputs + aNewState, 2);
-	logmsg("Switching to state 0x%x, setting outputs 0x%x\r\n", aNewState, relayState);
 #ifndef RELAY_DISABLE_ALL
 	Rel1_SetConditional(relayState & RELAY(1));
 	Rel2_SetConditional(relayState & RELAY(2));
