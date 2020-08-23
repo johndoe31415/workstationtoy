@@ -3,12 +3,12 @@
 
 #include <avr/io.h>
 
-enum SPIAccessMode {
+enum spi_mode_t {
 	SPIACCESS_PGM,
 	SPIACCESS_OPERATION,
 };
 
-enum SPISpeed {
+enum spi_speed_t {
 	SPISPEED_DIV_2 = 0x80,
 	SPISPEED_DIV_4 = 0,
 	SPISPEED_DIV_8 = _BV(SPR0) | 0x80,
@@ -18,15 +18,15 @@ enum SPISpeed {
 	SPISPEED_DIV_128 = _BV(SPR0) | _BV(SPR1),
 };
 
-struct SPIEndpoint {
-	enum SPIAccessMode mode;
-	enum SPISpeed speed;
+struct spi_endpoint_t {
+	enum spi_mode_t mode;
+	enum spi_speed_t speed;
 };
 
 /*************** AUTO GENERATED SECTION FOLLOWS ***************/
-void spiDeselect(void);
-struct SPIEndpoint spiGetCurrentEndpoint(void);
-void spiSelectSlave(enum SPIAccessMode aMode, enum SPISpeed aSpeed);
+void spi_deselect(void);
+struct spi_endpoint_t spi_get_current_endpoint(void);
+void spiSelectSlave(enum spi_mode_t aMode, enum spi_speed_t aSpeed);
 void spi_tx(void *aData, uint8_t aLength);
 void spi_tx_pause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteCount, uint16_t aDelayMicros);
 uint16_t crc_test(const uint8_t *a, uint8_t b);

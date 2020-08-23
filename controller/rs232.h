@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 /*************** AUTO GENERATED SECTION FOLLOWS ***************/
-void rs232TransmitChar(unsigned char aChar);
-void initRs232(void);
+void rs232_tx_char(unsigned char aChar);
+void init_rs232(void);
 /***************  AUTO GENERATED SECTION ENDS   ***************/
 
 #endif

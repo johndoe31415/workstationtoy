@@ -18,7 +18,7 @@ uint16_t crc_test(const uint8_t *a, uint8_t b);
 ISR(USART1_RX_vect) {
 	volatile uint8_t data = UDR1;
 	(void)data;
-	rs232TransmitChar(data+1);
+	rs232_tx_char(data+1);
 	switch (data) {
 
 		case 'a':
@@ -31,24 +31,24 @@ ISR(USART1_RX_vect) {
 	};
 }
 
-static void initRs232Stdout(void) {
+static void rs232_init_stdout(void) {
 	static FILE uartStdout = FDEV_SETUP_STREAM(rs232PutChar, NULL, _FDEV_SETUP_WRITE);
 	stdout = &uartStdout;
 }
 
 static int rs232PutChar(char aChar, FILE *aStream) {
-	rs232TransmitChar(aChar);
+	rs232_tx_char(aChar);
 	return 1;
 }
 
-void rs232TransmitChar(unsigned char aChar) {
+void rs232_tx_char(unsigned char aChar) {
 	while (!(UCSR1A & _BV(UDRE1)));		/* Wait until data register empty */
 	UDR1 = aChar;
 }
 
-void initRs232(void) {
+void init_rs232(void) {
 	UBRR1 = 8;												/* 115200 Baud @ 16 MHz */
 	UCSR1B = _BV(RXCIE1) | _BV(TXEN1) | _BV(RXEN1);			/* Enable transmitter and receiver, RXC IRQ */
-	initRs232Stdout();
+	rs232_init_stdout();
 }
 

@@ -53,7 +53,7 @@ static void trip_rcd(void) {
 
 int main(void) {
 	initHAL();
-	initRs232();
+	init_rs232();
 	init_spi();
 	init_buzzer();
 

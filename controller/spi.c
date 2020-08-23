@@ -15,10 +15,10 @@
 #define SPI_SLAVE_DEFAULT_SEQUENCE_NUMBER						0xa5
 #define CRC_INITIAL_VALUE                                       0xa55a
 
-static struct SPIEndpoint selectedEndpoint;
+static struct spi_endpoint_t selectedEndpoint;
 static uint8_t savedSREGRegister;
 
-static void spiSetSpeed(enum SPISpeed aSpeed) {
+static void spiSetSpeed(enum spi_speed_t aSpeed) {
 	selectedEndpoint.speed = aSpeed;
 	SPCR &= ~(_BV(SPR0) | _BV(SPR1));
 	SPCR |= (aSpeed & (_BV(SPR0) | _BV(SPR1)));
@@ -28,17 +28,17 @@ static void spiSetSpeed(enum SPISpeed aSpeed) {
 	}
 }
 
-void spiDeselect(void) {
+void spi_deselect(void) {
 	Frontpanel_SS_SetInactive();
 	Frontpanel_RESET_SetInactive();
 	SREG = savedSREGRegister;
 }
 
-struct SPIEndpoint spiGetCurrentEndpoint(void) {
+struct spi_endpoint_t spi_get_current_endpoint(void) {
 	return selectedEndpoint;
 }
 
-void spiSelectSlave(enum SPIAccessMode aMode, enum SPISpeed aSpeed) {
+void spiSelectSlave(enum spi_mode_t aMode, enum spi_speed_t aSpeed) {
 	savedSREGRegister = SREG;
 	cli();
 
@@ -105,7 +105,7 @@ static bool spi_tx_to_slave_raw(void *aData, uint8_t aLength, uint8_t aMasterLen
 	spi_tx_fill_crc(aData, aMasterLength);
 
 	spi_tx_pause(aData, aLength, aMasterLength, aDelayMicros);
-	spiDeselect();
+	spi_deselect();
 
 	uint16_t rxCRC = crc_calc_data(CRC_INITIAL_VALUE, aData + aMasterLength, aLength - aMasterLength - 2);
 	bool receivedOK = *((uint16_t*)(aData + aLength - 2)) == rxCRC;
