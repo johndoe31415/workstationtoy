@@ -22,12 +22,12 @@ void guiLoop(void) {
 		bool event = false;
 
 		if (Frontpanel_IRQ_IsActive()) {
-			struct KeyboardEvent keyPressEvent = getFrontpanelKey();
+			struct btn_event_t keyPressEvent = fp_get_button_event();
 			handleKeypress(keyPressEvent.eventType, keyPressEvent.key);
 			//logmsg("Keypress type 0x%x, key 0x%x\r\n", keyPressEvent.eventType, keyPressEvent.key);
 			event = true;
 
-			setLED(LED_PROTECTIVE_EARTH, STATE_BLINK_ORANGE_SLOW);
+			fp_set_led(LED_PROTECTIVE_EARTH, STATE_BLINK_ORANGE_SLOW);
 		}
 
 		if (event) {

@@ -28,16 +28,16 @@ static void set_relay_state(uint16_t value) {
 	Rel11_SetConditional((value >> 10) & 1);
 	Rel12_SetConditional((value >> 11) & 1);
 	switch ((value >> 0) & 3) {
-		case 0:	setLED(LED_OPERATION, STATE_OFF); break;
-		case 1:	setLED(LED_OPERATION, STATE_RED); break;
-		case 2:	setLED(LED_OPERATION, STATE_GREEN); break;
-		case 3:	setLED(LED_OPERATION, STATE_ORANGE); break;
+		case 0:	fp_set_led(LED_OPERATION, STATE_OFF); break;
+		case 1:	fp_set_led(LED_OPERATION, STATE_RED); break;
+		case 2:	fp_set_led(LED_OPERATION, STATE_GREEN); break;
+		case 3:	fp_set_led(LED_OPERATION, STATE_ORANGE); break;
 	}
 	switch ((value >> 2) & 3) {
-		case 0:	setLED(LED_ERROR, STATE_OFF); break;
-		case 1:	setLED(LED_ERROR, STATE_RED); break;
-		case 2:	setLED(LED_ERROR, STATE_GREEN); break;
-		case 3:	setLED(LED_ERROR, STATE_ORANGE); break;
+		case 0:	fp_set_led(LED_ERROR, STATE_OFF); break;
+		case 1:	fp_set_led(LED_ERROR, STATE_RED); break;
+		case 2:	fp_set_led(LED_ERROR, STATE_GREEN); break;
+		case 3:	fp_set_led(LED_ERROR, STATE_ORANGE); break;
 	}
 }
 
@@ -56,19 +56,21 @@ int main(void) {
 	init_rs232();
 	init_spi();
 	init_buzzer();
+	init_frontpanel();
 
 	/* Then activate interrupts */
 	sei();
 
-	/* Enable "active" LED */
-	setLED(LED_OPERATION, STATE_GREEN);
-
 //	buzzer_play(BUZZER_NOTIFICATION);
 
 	while (true) {
-		/*
 //		Voltmeter_Toggle();
-		setLED(LED_OPERATION, STATE_RED);
+		fp_set_led(LED_OPERATION, STATE_RED);
+		delay_millis(500);
+		fp_set_led(LED_OPERATION, STATE_GREEN);
+		delay_millis(500);
+
+		/*
 
 			trip_rcd();
 			*/

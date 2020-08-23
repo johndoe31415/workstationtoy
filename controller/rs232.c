@@ -22,11 +22,11 @@ ISR(USART1_RX_vect) {
 	switch (data) {
 
 		case 'a':
-			getFrontpanelKey();
+			fp_get_button_event();
 			break;
 
 		case 'w':
-			ledTest();
+			fp_test_leds();
 			break;
 	};
 }

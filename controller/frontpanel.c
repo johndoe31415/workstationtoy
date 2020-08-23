@@ -39,35 +39,35 @@ static const struct led_pattern_t patterns[] PROGMEM = {
 	},
 };
 
-static void led_state_to_pattern(enum FrontpanelLEDState aState, struct led_pattern_t *aPattern) {
-	memcpy_P(aPattern, patterns + aState, sizeof(struct led_pattern_t));
+static void led_state_to_pattern(enum led_state_t state, struct led_pattern_t *pattern) {
+	memcpy_P(pattern, patterns + state, sizeof(struct led_pattern_t));
 }
 
-void setLED(enum fpEnum_ledIndex aLED, enum FrontpanelLEDState aState) {
+void fp_set_led(enum fpEnum_ledIndex led, enum led_state_t state) {
 	struct led_pattern_t pattern;
-	led_state_to_pattern(aState, &pattern);
+	led_state_to_pattern(state, &pattern);
 
 	struct fpCmd_SetLEDPattern cmd;
 	memset(&cmd, 0, sizeof(cmd));
 	cmd.master.cmdId = FP_SETLEDPATTERN_CMDID;
-	cmd.master.ledIndex = aLED;
+	cmd.master.ledIndex = led;
 	cmd.master.patternRed = pattern.red;
 	cmd.master.patternGreen = pattern.green;
 
 	spi_tx_to_slave(&cmd, sizeof(cmd), sizeof(cmd.master), FP_SETLEDPATTERN_DELAY_US);
 }
 
-static void led_test_specific(enum fpEnum_ledIndex aLED) {
-	setLED(aLED, STATE_GREEN);
+static void led_test_specific(enum fpEnum_ledIndex led) {
+	fp_set_led(led, STATE_GREEN);
 	delay_millis(500);
-	setLED(aLED, STATE_RED);
+	fp_set_led(led, STATE_RED);
 	delay_millis(500);
-	setLED(aLED, STATE_ORANGE);
+	fp_set_led(led, STATE_ORANGE);
 	delay_millis(500);
-	setLED(aLED, STATE_OFF);
+	fp_set_led(led, STATE_OFF);
 }
 
-void ledTest(void) {
+void fp_test_leds(void) {
 	led_test_specific(LED_OPERATION);
 	led_test_specific(LED_ERROR);
 	led_test_specific(LED_AUTOMATIC_SHUTDOWN);
@@ -80,14 +80,27 @@ void ledTest(void) {
 	led_test_specific(LED_OUTPUT);
 }
 
-struct KeyboardEvent getFrontpanelKey(void) {
+struct btn_event_t fp_get_button_event(void) {
 	struct fpCmd_ReadKeyboard cmd;
 	memset(&cmd, 0, sizeof(cmd));
 	cmd.master.cmdId = FP_READKEYBOARD_CMDID;
 	spi_tx_to_slave(&cmd, sizeof(cmd), sizeof(cmd.master), FP_READKEYBOARD_DELAY_US);
 
-	struct KeyboardEvent returnValue;
+	struct btn_event_t returnValue;
 	returnValue.eventType = cmd.slave.keyboardEvent;
 	returnValue.key = cmd.slave.pressedKey;
 	return returnValue;
+}
+
+void init_frontpanel(void) {
+    fp_set_led(LED_OPERATION, STATE_OFF);
+	fp_set_led(LED_ERROR, STATE_OFF);
+	fp_set_led(LED_AUTOMATIC_SHUTDOWN, STATE_OFF);
+	fp_set_led(LED_TEMPERATURE, STATE_OFF);
+	fp_set_led(LED_PROTECTIVE_EARTH, STATE_OFF);
+	fp_set_led(LED_PHASE_ERROR, STATE_OFF);
+	fp_set_led(LED_OVERCURRENT, STATE_OFF);
+	fp_set_led(LED_AUTO_TRANSFORMER, STATE_OFF);
+	fp_set_led(LED_ISOLATION_TRANSFORMER, STATE_OFF);
+	fp_set_led(LED_OUTPUT, STATE_OFF);
 }
