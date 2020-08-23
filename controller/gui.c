@@ -38,17 +38,6 @@ static void handleKeypress(enum fpEnum_keyboardEvent aEventType, enum fpEnum_key
 	//state.lastUpdateTime = getTimeSeconds();
 }
 
-static bool handleFootpedal(bool aFootPedalState) {
-	bool event = false;
-	if (state.outputState == OUTPUT_ARMED) {
-		if (aFootPedalState != state.footPedalState) {
-			state.footPedalState = aFootPedalState;
-			event = true;
-		}
-	}
-	return event;
-}
-
 static void updateFrontpanelLEDs(void) {
 	switch (state.outputState) {
 		case OUTPUT_DISABLED:
@@ -90,7 +79,6 @@ void guiLoop(void) {
 	updateFrontpanelLEDs();
 	while (true) {
 		bool event = false;
-		event = handleFootpedal(Footpedal_IsActive()) || event;
 
 		if (Frontpanel_IRQ_IsActive()) {
 			struct KeyboardEvent keyPressEvent = getFrontpanelKey();

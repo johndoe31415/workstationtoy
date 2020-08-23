@@ -13,26 +13,26 @@
 		<template name="diginput">
 			<pin type="input" initialpullup="active" />
 		</template>
-		
+
 		<template name="diginputinv">
 			<pin type="input" initialpullup="active" />
 			<activelow />
 		</template>
-		
+
 		<template name="digswitchinput">
 			<pin type="input" initialpullup="active" />
 			<activelow />
 		</template>
-		
+
 		<template name="digoutput">
 			<pin type="output" initialvalue="inactive" />
 		</template>
-		
+
 		<template name="digoutputinv">
 			<pin type="output" initialvalue="inactive" />
 			<activelow />
 		</template>
-		
+
 		<template name="digio">
 			<pin type="io" initialstate="input" initialpullup="inactive" />
 		</template>
@@ -56,7 +56,7 @@
 	<portpin name="PB2" template="digoutput">
 		<description value="MOSI" />
 	</portpin>
-	
+
 	<portpin name="PB3" template="diginput">
 		<description value="MISO" />
 	</portpin>
@@ -66,51 +66,13 @@
 	<portpin name="PB0" template="digoutputinv">
 		<description value="Frontpanel_SS" />
 	</portpin>
-	
+
 	<portpin name="PD6" template="digoutputinv">
 		<description value="Frontpanel_RESET" />
 	</portpin>
-	
+
 	<portpin name="PD7" template="diginput">
 		<description value="Frontpanel_IRQ" />
-	</portpin>
-
-
-	<!-- Voltage monitor connector -->
-	<portpin name="PG0" template="digoutputinv">
-		<description value="VoltageMonitor_SS" />
-	</portpin>
-	
-	<portpin name="PD4" template="digoutputinv">
-		<description value="VoltageMonitor_RESET" />
-	</portpin>
-	
-	<portpin name="PE7" template="diginput">
-		<description value="VoltageMonitor_IRQ" />
-	</portpin>
-
-
-	<!-- Current monitor connector -->
-	<portpin name="PG1" template="digoutputinv">
-		<description value="CurrentMonitor_SS" />
-	</portpin>
-	
-	<portpin name="PD5" template="digoutputinv">
-		<description value="CurrentMonitor_RESET" />
-	</portpin>
-	
-	<portpin name="PE6" template="diginput">
-		<description value="CurrentMonitor_IRQ" />
-	</portpin>
-
-
-	<!-- Relais voltage measurement -->
-	<portpin name="PF0" template="diginput">
-		<description value="RelaisVoltagePresent" />
-	</portpin>
-	<portpin name="PC0" template="diginput">
-		<!-- Relais voltage after emergency shutdown button -->
-		<description value="RelaisVoltagePresent2" />
 	</portpin>
 
 
@@ -163,13 +125,9 @@
 	<portpin name="PC1" template="digoutput">
 		<description value="Output5V" />
 	</portpin>
-	
+
 	<portpin name="PB7" template="digoutput">
 		<description value="Buzzer" />
-	</portpin>
-	
-	<portpin name="PE5" template="digswitchinput">
-		<description value="Footpedal" />
 	</portpin>
 
 </HAL>

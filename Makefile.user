@@ -11,7 +11,7 @@ SIZE := avr-size
 STRIP := avr-strip
 AVRDUDE := avrdude
 
-HALGEN := /home/joe/Hardware/HALGen/halgen
+HALGEN := ../../AVR/HALGen/halgen
 
 DATASHEET_DIRECTORY := /home/joe/Elektronik/Datasheets/files/uC/AVR/
 

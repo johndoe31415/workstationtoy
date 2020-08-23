@@ -128,7 +128,7 @@ endif
 all: $(PROJNAME) $(PROJNAME).S $(PROJNAME)_flash.hex $(PROJNAME)_eeprom.hex $(PROJNAME).bin $(PROJNAME).E $(PROJNAME).syms $(PROJNAME).dmp
 
 halgen:
-	$(HALGEN) -a avr -o HAL.h $(HALINPUT)
+	$(HALGEN) -a avr -o hal.h $(HALINPUT)
 
 doc:
 	evince $(DATASHEET_DIRECTORY)$(DATASHEET) &

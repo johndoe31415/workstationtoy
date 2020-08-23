@@ -31,10 +31,6 @@ static void spiSetSpeed(enum SPISpeed aSpeed) {
 void spiDeselect(void) {
 	Frontpanel_SS_SetInactive();
 	Frontpanel_RESET_SetInactive();
-	VoltageMonitor_SS_SetInactive();
-	VoltageMonitor_RESET_SetInactive();
-	CurrentMonitor_SS_SetInactive();
-	CurrentMonitor_RESET_SetInactive();
 	SREG = savedSREGRegister;
 }
 

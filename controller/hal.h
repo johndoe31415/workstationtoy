@@ -1,7 +1,7 @@
-/* Automatically generated HAL from HAL.xml */
+/* Automatically generated HAL from hal.xml */
 /* NEVER EDIT MANUALLY */
 
-/* Generated on: 2014-01-23 14:01:05 */
+/* Generated on: 2020-08-23 11:11:08 */
 
 #ifndef __HAL_H__
 #define __HAL_H__
@@ -159,150 +159,6 @@
 #define Frontpanel_IRQ_IsInactive()              (Frontpanel_IRQ_Get() == 0)
 #define Frontpanel_IRQ_IsActive()                (Frontpanel_IRQ_Get() != 0)
 #define Frontpanel_IRQ_Init()                    { Frontpanel_IRQ_SetPullupActive(); Frontpanel_IRQ_ModeInput(); }
-
-/* VoltageMonitor_SS -> PG0 (Output, Initially Inactive, Active-Low) */
-#define VoltageMonitor_SS_BIT                    0
-#define VoltageMonitor_SS_PIN                    PING
-#define VoltageMonitor_SS_PORT                   PORTG
-#define VoltageMonitor_SS_DDR                    DDRG
-#define VoltageMonitor_SS_ModeOutput()           VoltageMonitor_SS_DDR |= _BV(VoltageMonitor_SS_BIT)
-#define VoltageMonitor_SS_IsOutput()             ((VoltageMonitor_SS_DDR & _BV(VoltageMonitor_SS_BIT)) != 0)
-#define VoltageMonitor_SS_SetHIGH()              VoltageMonitor_SS_PORT |= _BV(VoltageMonitor_SS_BIT)
-#define VoltageMonitor_SS_SetLOW()               VoltageMonitor_SS_PORT &= ~_BV(VoltageMonitor_SS_BIT)
-#define VoltageMonitor_SS_Get()                  (VoltageMonitor_SS_PIN & _BV(VoltageMonitor_SS_BIT))
-#define VoltageMonitor_SS_SetInactive()          VoltageMonitor_SS_SetHIGH()
-#define VoltageMonitor_SS_SetActive()            VoltageMonitor_SS_SetLOW()
-#define VoltageMonitor_SS_Toggle()               VoltageMonitor_SS_PORT ^= _BV(VoltageMonitor_SS_BIT)
-#define VoltageMonitor_SS_SetConditional(condition) if (condition) VoltageMonitor_SS_SetActive(); else VoltageMonitor_SS_SetInactive()
-#define VoltageMonitor_SS_SetConditionalToggle(conditionon, conditionoff, conditiontoggle) if (conditionon) { VoltageMonitor_SS_SetActive(); } else if (conditionoff) { VoltageMonitor_SS_SetInactive(); } else if (conditiontoggle) { VoltageMonitor_SS_Toggle(); }
-#define VoltageMonitor_SS_Pulse()                { VoltageMonitor_SS_SetActive(); VoltageMonitor_SS_SetInactive(); }
-#define VoltageMonitor_SS_PulseNop()             { VoltageMonitor_SS_SetActive(); nop(); VoltageMonitor_SS_SetInactive(); }
-#define VoltageMonitor_SS_IsInactive()           (VoltageMonitor_SS_Get() != 0)
-#define VoltageMonitor_SS_IsActive()             (VoltageMonitor_SS_Get() == 0)
-#define VoltageMonitor_SS_Init()                 { VoltageMonitor_SS_SetInactive(); VoltageMonitor_SS_ModeOutput(); }
-
-/* VoltageMonitor_RESET -> PD4 (Output, Initially Inactive, Active-Low) */
-#define VoltageMonitor_RESET_BIT                 4
-#define VoltageMonitor_RESET_PIN                 PIND
-#define VoltageMonitor_RESET_PORT                PORTD
-#define VoltageMonitor_RESET_DDR                 DDRD
-#define VoltageMonitor_RESET_ModeOutput()        VoltageMonitor_RESET_DDR |= _BV(VoltageMonitor_RESET_BIT)
-#define VoltageMonitor_RESET_IsOutput()          ((VoltageMonitor_RESET_DDR & _BV(VoltageMonitor_RESET_BIT)) != 0)
-#define VoltageMonitor_RESET_SetHIGH()           VoltageMonitor_RESET_PORT |= _BV(VoltageMonitor_RESET_BIT)
-#define VoltageMonitor_RESET_SetLOW()            VoltageMonitor_RESET_PORT &= ~_BV(VoltageMonitor_RESET_BIT)
-#define VoltageMonitor_RESET_Get()               (VoltageMonitor_RESET_PIN & _BV(VoltageMonitor_RESET_BIT))
-#define VoltageMonitor_RESET_SetInactive()       VoltageMonitor_RESET_SetHIGH()
-#define VoltageMonitor_RESET_SetActive()         VoltageMonitor_RESET_SetLOW()
-#define VoltageMonitor_RESET_Toggle()            VoltageMonitor_RESET_PORT ^= _BV(VoltageMonitor_RESET_BIT)
-#define VoltageMonitor_RESET_SetConditional(condition) if (condition) VoltageMonitor_RESET_SetActive(); else VoltageMonitor_RESET_SetInactive()
-#define VoltageMonitor_RESET_SetConditionalToggle(conditionon, conditionoff, conditiontoggle) if (conditionon) { VoltageMonitor_RESET_SetActive(); } else if (conditionoff) { VoltageMonitor_RESET_SetInactive(); } else if (conditiontoggle) { VoltageMonitor_RESET_Toggle(); }
-#define VoltageMonitor_RESET_Pulse()             { VoltageMonitor_RESET_SetActive(); VoltageMonitor_RESET_SetInactive(); }
-#define VoltageMonitor_RESET_PulseNop()          { VoltageMonitor_RESET_SetActive(); nop(); VoltageMonitor_RESET_SetInactive(); }
-#define VoltageMonitor_RESET_IsInactive()        (VoltageMonitor_RESET_Get() != 0)
-#define VoltageMonitor_RESET_IsActive()          (VoltageMonitor_RESET_Get() == 0)
-#define VoltageMonitor_RESET_Init()              { VoltageMonitor_RESET_SetInactive(); VoltageMonitor_RESET_ModeOutput(); }
-
-/* VoltageMonitor_IRQ -> PE7 (Input, Initially Pullup On) */
-#define VoltageMonitor_IRQ_BIT                   7
-#define VoltageMonitor_IRQ_PIN                   PINE
-#define VoltageMonitor_IRQ_PORT                  PORTE
-#define VoltageMonitor_IRQ_DDR                   DDRE
-#define VoltageMonitor_IRQ_SetPullupActive()     VoltageMonitor_IRQ_PORT |= _BV(VoltageMonitor_IRQ_BIT)
-#define VoltageMonitor_IRQ_SetPullupInactive()   VoltageMonitor_IRQ_PORT &= ~_BV(VoltageMonitor_IRQ_BIT)
-#define VoltageMonitor_IRQ_ModeInput()           VoltageMonitor_IRQ_DDR &= ~_BV(VoltageMonitor_IRQ_BIT)
-#define VoltageMonitor_IRQ_IsInput()             ((VoltageMonitor_IRQ_DDR & _BV(VoltageMonitor_IRQ_BIT)) == 0)
-#define VoltageMonitor_IRQ_Get()                 (VoltageMonitor_IRQ_PIN & _BV(VoltageMonitor_IRQ_BIT))
-#define VoltageMonitor_IRQ_GetBit()              (VoltageMonitor_IRQ_Get() >> VoltageMonitor_IRQ_BIT)
-#define VoltageMonitor_IRQ_IsInactive()          (VoltageMonitor_IRQ_Get() == 0)
-#define VoltageMonitor_IRQ_IsActive()            (VoltageMonitor_IRQ_Get() != 0)
-#define VoltageMonitor_IRQ_Init()                { VoltageMonitor_IRQ_SetPullupActive(); VoltageMonitor_IRQ_ModeInput(); }
-
-/* CurrentMonitor_SS -> PG1 (Output, Initially Inactive, Active-Low) */
-#define CurrentMonitor_SS_BIT                    1
-#define CurrentMonitor_SS_PIN                    PING
-#define CurrentMonitor_SS_PORT                   PORTG
-#define CurrentMonitor_SS_DDR                    DDRG
-#define CurrentMonitor_SS_ModeOutput()           CurrentMonitor_SS_DDR |= _BV(CurrentMonitor_SS_BIT)
-#define CurrentMonitor_SS_IsOutput()             ((CurrentMonitor_SS_DDR & _BV(CurrentMonitor_SS_BIT)) != 0)
-#define CurrentMonitor_SS_SetHIGH()              CurrentMonitor_SS_PORT |= _BV(CurrentMonitor_SS_BIT)
-#define CurrentMonitor_SS_SetLOW()               CurrentMonitor_SS_PORT &= ~_BV(CurrentMonitor_SS_BIT)
-#define CurrentMonitor_SS_Get()                  (CurrentMonitor_SS_PIN & _BV(CurrentMonitor_SS_BIT))
-#define CurrentMonitor_SS_SetInactive()          CurrentMonitor_SS_SetHIGH()
-#define CurrentMonitor_SS_SetActive()            CurrentMonitor_SS_SetLOW()
-#define CurrentMonitor_SS_Toggle()               CurrentMonitor_SS_PORT ^= _BV(CurrentMonitor_SS_BIT)
-#define CurrentMonitor_SS_SetConditional(condition) if (condition) CurrentMonitor_SS_SetActive(); else CurrentMonitor_SS_SetInactive()
-#define CurrentMonitor_SS_SetConditionalToggle(conditionon, conditionoff, conditiontoggle) if (conditionon) { CurrentMonitor_SS_SetActive(); } else if (conditionoff) { CurrentMonitor_SS_SetInactive(); } else if (conditiontoggle) { CurrentMonitor_SS_Toggle(); }
-#define CurrentMonitor_SS_Pulse()                { CurrentMonitor_SS_SetActive(); CurrentMonitor_SS_SetInactive(); }
-#define CurrentMonitor_SS_PulseNop()             { CurrentMonitor_SS_SetActive(); nop(); CurrentMonitor_SS_SetInactive(); }
-#define CurrentMonitor_SS_IsInactive()           (CurrentMonitor_SS_Get() != 0)
-#define CurrentMonitor_SS_IsActive()             (CurrentMonitor_SS_Get() == 0)
-#define CurrentMonitor_SS_Init()                 { CurrentMonitor_SS_SetInactive(); CurrentMonitor_SS_ModeOutput(); }
-
-/* CurrentMonitor_RESET -> PD5 (Output, Initially Inactive, Active-Low) */
-#define CurrentMonitor_RESET_BIT                 5
-#define CurrentMonitor_RESET_PIN                 PIND
-#define CurrentMonitor_RESET_PORT                PORTD
-#define CurrentMonitor_RESET_DDR                 DDRD
-#define CurrentMonitor_RESET_ModeOutput()        CurrentMonitor_RESET_DDR |= _BV(CurrentMonitor_RESET_BIT)
-#define CurrentMonitor_RESET_IsOutput()          ((CurrentMonitor_RESET_DDR & _BV(CurrentMonitor_RESET_BIT)) != 0)
-#define CurrentMonitor_RESET_SetHIGH()           CurrentMonitor_RESET_PORT |= _BV(CurrentMonitor_RESET_BIT)
-#define CurrentMonitor_RESET_SetLOW()            CurrentMonitor_RESET_PORT &= ~_BV(CurrentMonitor_RESET_BIT)
-#define CurrentMonitor_RESET_Get()               (CurrentMonitor_RESET_PIN & _BV(CurrentMonitor_RESET_BIT))
-#define CurrentMonitor_RESET_SetInactive()       CurrentMonitor_RESET_SetHIGH()
-#define CurrentMonitor_RESET_SetActive()         CurrentMonitor_RESET_SetLOW()
-#define CurrentMonitor_RESET_Toggle()            CurrentMonitor_RESET_PORT ^= _BV(CurrentMonitor_RESET_BIT)
-#define CurrentMonitor_RESET_SetConditional(condition) if (condition) CurrentMonitor_RESET_SetActive(); else CurrentMonitor_RESET_SetInactive()
-#define CurrentMonitor_RESET_SetConditionalToggle(conditionon, conditionoff, conditiontoggle) if (conditionon) { CurrentMonitor_RESET_SetActive(); } else if (conditionoff) { CurrentMonitor_RESET_SetInactive(); } else if (conditiontoggle) { CurrentMonitor_RESET_Toggle(); }
-#define CurrentMonitor_RESET_Pulse()             { CurrentMonitor_RESET_SetActive(); CurrentMonitor_RESET_SetInactive(); }
-#define CurrentMonitor_RESET_PulseNop()          { CurrentMonitor_RESET_SetActive(); nop(); CurrentMonitor_RESET_SetInactive(); }
-#define CurrentMonitor_RESET_IsInactive()        (CurrentMonitor_RESET_Get() != 0)
-#define CurrentMonitor_RESET_IsActive()          (CurrentMonitor_RESET_Get() == 0)
-#define CurrentMonitor_RESET_Init()              { CurrentMonitor_RESET_SetInactive(); CurrentMonitor_RESET_ModeOutput(); }
-
-/* CurrentMonitor_IRQ -> PE6 (Input, Initially Pullup On) */
-#define CurrentMonitor_IRQ_BIT                   6
-#define CurrentMonitor_IRQ_PIN                   PINE
-#define CurrentMonitor_IRQ_PORT                  PORTE
-#define CurrentMonitor_IRQ_DDR                   DDRE
-#define CurrentMonitor_IRQ_SetPullupActive()     CurrentMonitor_IRQ_PORT |= _BV(CurrentMonitor_IRQ_BIT)
-#define CurrentMonitor_IRQ_SetPullupInactive()   CurrentMonitor_IRQ_PORT &= ~_BV(CurrentMonitor_IRQ_BIT)
-#define CurrentMonitor_IRQ_ModeInput()           CurrentMonitor_IRQ_DDR &= ~_BV(CurrentMonitor_IRQ_BIT)
-#define CurrentMonitor_IRQ_IsInput()             ((CurrentMonitor_IRQ_DDR & _BV(CurrentMonitor_IRQ_BIT)) == 0)
-#define CurrentMonitor_IRQ_Get()                 (CurrentMonitor_IRQ_PIN & _BV(CurrentMonitor_IRQ_BIT))
-#define CurrentMonitor_IRQ_GetBit()              (CurrentMonitor_IRQ_Get() >> CurrentMonitor_IRQ_BIT)
-#define CurrentMonitor_IRQ_IsInactive()          (CurrentMonitor_IRQ_Get() == 0)
-#define CurrentMonitor_IRQ_IsActive()            (CurrentMonitor_IRQ_Get() != 0)
-#define CurrentMonitor_IRQ_Init()                { CurrentMonitor_IRQ_SetPullupActive(); CurrentMonitor_IRQ_ModeInput(); }
-
-/* RelaisVoltagePresent -> PF0 (Input, Initially Pullup On) */
-#define RelaisVoltagePresent_BIT                 0
-#define RelaisVoltagePresent_PIN                 PINF
-#define RelaisVoltagePresent_PORT                PORTF
-#define RelaisVoltagePresent_DDR                 DDRF
-#define RelaisVoltagePresent_SetPullupActive()   RelaisVoltagePresent_PORT |= _BV(RelaisVoltagePresent_BIT)
-#define RelaisVoltagePresent_SetPullupInactive() RelaisVoltagePresent_PORT &= ~_BV(RelaisVoltagePresent_BIT)
-#define RelaisVoltagePresent_ModeInput()         RelaisVoltagePresent_DDR &= ~_BV(RelaisVoltagePresent_BIT)
-#define RelaisVoltagePresent_IsInput()           ((RelaisVoltagePresent_DDR & _BV(RelaisVoltagePresent_BIT)) == 0)
-#define RelaisVoltagePresent_Get()               (RelaisVoltagePresent_PIN & _BV(RelaisVoltagePresent_BIT))
-#define RelaisVoltagePresent_GetBit()            (RelaisVoltagePresent_Get() >> RelaisVoltagePresent_BIT)
-#define RelaisVoltagePresent_IsInactive()        (RelaisVoltagePresent_Get() == 0)
-#define RelaisVoltagePresent_IsActive()          (RelaisVoltagePresent_Get() != 0)
-#define RelaisVoltagePresent_Init()              { RelaisVoltagePresent_SetPullupActive(); RelaisVoltagePresent_ModeInput(); }
-
-/* RelaisVoltagePresent2 -> PC0 (Input, Initially Pullup On) */
-#define RelaisVoltagePresent2_BIT                0
-#define RelaisVoltagePresent2_PIN                PINC
-#define RelaisVoltagePresent2_PORT               PORTC
-#define RelaisVoltagePresent2_DDR                DDRC
-#define RelaisVoltagePresent2_SetPullupActive()  RelaisVoltagePresent2_PORT |= _BV(RelaisVoltagePresent2_BIT)
-#define RelaisVoltagePresent2_SetPullupInactive() RelaisVoltagePresent2_PORT &= ~_BV(RelaisVoltagePresent2_BIT)
-#define RelaisVoltagePresent2_ModeInput()        RelaisVoltagePresent2_DDR &= ~_BV(RelaisVoltagePresent2_BIT)
-#define RelaisVoltagePresent2_IsInput()          ((RelaisVoltagePresent2_DDR & _BV(RelaisVoltagePresent2_BIT)) == 0)
-#define RelaisVoltagePresent2_Get()              (RelaisVoltagePresent2_PIN & _BV(RelaisVoltagePresent2_BIT))
-#define RelaisVoltagePresent2_GetBit()           (RelaisVoltagePresent2_Get() >> RelaisVoltagePresent2_BIT)
-#define RelaisVoltagePresent2_IsInactive()       (RelaisVoltagePresent2_Get() == 0)
-#define RelaisVoltagePresent2_IsActive()         (RelaisVoltagePresent2_Get() != 0)
-#define RelaisVoltagePresent2_Init()             { RelaisVoltagePresent2_SetPullupActive(); RelaisVoltagePresent2_ModeInput(); }
 
 /* Debug1 -> PF1 (Output, Initially Inactive) */
 #define Debug1_BIT                               1
@@ -640,21 +496,6 @@
 #define Buzzer_IsActive()                        (Buzzer_Get() != 0)
 #define Buzzer_Init()                            { Buzzer_SetInactive(); Buzzer_ModeOutput(); }
 
-/* Footpedal -> PE5 (Input, Initially Pullup On, Active-Low) */
-#define Footpedal_BIT                            5
-#define Footpedal_PIN                            PINE
-#define Footpedal_PORT                           PORTE
-#define Footpedal_DDR                            DDRE
-#define Footpedal_SetPullupActive()              Footpedal_PORT |= _BV(Footpedal_BIT)
-#define Footpedal_SetPullupInactive()            Footpedal_PORT &= ~_BV(Footpedal_BIT)
-#define Footpedal_ModeInput()                    Footpedal_DDR &= ~_BV(Footpedal_BIT)
-#define Footpedal_IsInput()                      ((Footpedal_DDR & _BV(Footpedal_BIT)) == 0)
-#define Footpedal_Get()                          (Footpedal_PIN & _BV(Footpedal_BIT))
-#define Footpedal_GetBit()                       (Footpedal_Get() >> Footpedal_BIT)
-#define Footpedal_IsInactive()                   (Footpedal_Get() != 0)
-#define Footpedal_IsActive()                     (Footpedal_Get() == 0)
-#define Footpedal_Init()                         { Footpedal_SetPullupActive(); Footpedal_ModeInput(); }
-
 #define initHAL() {\
 		RS232_RX_Init();\
 		RS232_TX_Init();\
@@ -664,14 +505,6 @@
 		Frontpanel_SS_Init();\
 		Frontpanel_RESET_Init();\
 		Frontpanel_IRQ_Init();\
-		VoltageMonitor_SS_Init();\
-		VoltageMonitor_RESET_Init();\
-		VoltageMonitor_IRQ_Init();\
-		CurrentMonitor_SS_Init();\
-		CurrentMonitor_RESET_Init();\
-		CurrentMonitor_IRQ_Init();\
-		RelaisVoltagePresent_Init();\
-		RelaisVoltagePresent2_Init();\
 		Debug1_Init();\
 		Debug2_Init();\
 		Rel1_Init();\
@@ -688,7 +521,6 @@
 		Rel12_Init();\
 		Output5V_Init();\
 		Buzzer_Init();\
-		Footpedal_Init();\
 }
 
 #endif

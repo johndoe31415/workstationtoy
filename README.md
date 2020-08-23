@@ -23,7 +23,7 @@ one day I can go back in the history and see how I've done stuff.
 
 ## Processors
 The frontpanel (which handles key presses and LED indicators) runs an ATmega8.
-The core processor is an AVR128CAN.
+The core processor is an AVR AT90CAN128.
 
 ## License
 GNU GPL-3. There's one dependency in the original files from AVR-Crypto-Lib,
