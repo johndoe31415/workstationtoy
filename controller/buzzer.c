@@ -14,26 +14,26 @@
 #define FREQUENCY(f)						ROUNDDIV(125000UL, UINT32(f))
 #define LENGTH(f, l)						ROUNDDIV(UINT32(f) * UINT32(l) * 2, 1000UL)
 
-struct tone {
+struct tone_t {
 	uint8_t frequency;
 	uint16_t length;
 };
 
-struct melody {
+struct melody_t {
 	uint8_t repeat;
 	uint8_t toneCount;
-	struct tone tones[];
+	struct tone_t tones[];
 };
 
-static uint8_t currentTone;
-static uint8_t currentRepetition;
-static uint16_t currentLength;
-static const struct melody *currentSound;
+static uint8_t current_tone;
+static uint8_t current_repetition;
+static uint16_t current_length;
+static const struct melody_t *current_sound;
 
 #define PAUSE(lmillis)						{ .frequency = 0, .length = LENGTH(1000, lmillis) }
 #define NOTE(f, lmillis)					{ .frequency = FREQUENCY(f), .length = LENGTH(f, lmillis) }
 
-static const struct melody tcasAlert PROGMEM = {
+static const struct melody_t tcas_alert PROGMEM = {
 	.repeat = 4,
 	.toneCount = 10,
 	.tones = {
@@ -50,7 +50,7 @@ static const struct melody tcasAlert PROGMEM = {
 	},
 };
 
-static const struct melody simpleError PROGMEM = {
+static const struct melody_t simple_error PROGMEM = {
 	.repeat = 4,
 	.toneCount = 4,
 	.tones = {
@@ -61,7 +61,7 @@ static const struct melody simpleError PROGMEM = {
 	},
 };
 
-static const struct melody notificationMelody PROGMEM = {
+static const struct melody_t notificationMelody PROGMEM = {
 	.repeat = 2,
 	.toneCount = 2,
 	.tones = {
@@ -70,82 +70,82 @@ static const struct melody notificationMelody PROGMEM = {
 	},
 };
 
-static const struct melody* const melodies[] PROGMEM = {
-	[BUZZER_CRITICAL_ERROR] = &tcasAlert,
-	[BUZZER_SIMPLE_ERROR] = &simpleError,
+static const struct melody_t* const melodies[] PROGMEM = {
+	[BUZZER_CRITICAL_ERROR] = &tcas_alert,
+	[BUZZER_SIMPLE_ERROR] = &simple_error,
 	[BUZZER_NOTIFICATION] = &notificationMelody,
 };
 
-static void buzzerOff(void) {
+static void buzzer_off(void) {
 	TCCR0A &= ~(_BV(COM0A0) | _BV(COM0A1) | _BV(CS00) | _BV(CS01) | _BV(CS02));
 }
 
-static void buzzerOnSilent(void) {
+static void buzzer_on_silent(void) {
 	TCCR0A = (TCCR0A | _BV(CS01) | _BV(CS00)) & ~(_BV(COM0A0) | _BV(COM0A1));
 
 }
 
-static void buzzerOn(void) {
+static void buzzer_on(void) {
 	TCCR0A |= _BV(COM0A0) | _BV(CS01) | _BV(CS00);
 }
 
 static void nextNote(void) {
-	if (!currentSound) {
+	if (!current_sound) {
 		return;
 	}
 
-	struct melody melody;
-	memcpy_P(&melody, currentSound, sizeof(struct melody));
+	struct melody_t melody;
+	memcpy_P(&melody, current_sound, sizeof(struct melody_t));
 
-	if (currentTone == melody.toneCount) {
-		currentTone = 0;
+	if (current_tone == melody.toneCount) {
+		current_tone = 0;
 		/* End of current melody */
 		if (melody.repeat > 0) {
-			currentRepetition++;
-			if (currentRepetition == melody.repeat) {
+			current_repetition++;
+			if (current_repetition == melody.repeat) {
 				/* End of repetitions */
-				buzzerOff();
-				currentSound = NULL;
+				buzzer_off();
+				current_sound = NULL;
 				return;
 			}
 		}
 	}
 
-	struct tone tone;
-	memcpy_P(&tone, &currentSound->tones[currentTone], sizeof(struct tone));
+	struct tone_t tone;
+	memcpy_P(&tone, &current_sound->tones[current_tone], sizeof(struct tone_t));
 
 	if (tone.frequency == 0) {
 		OCR0A = 125;
-		currentLength = tone.length;
-		buzzerOnSilent();
+		current_length = tone.length;
+		buzzer_on_silent();
 	} else {
 		OCR0A = tone.frequency;
-		currentLength = tone.length;
-		buzzerOn();
+		current_length = tone.length;
+		buzzer_on();
 	}
 
-	currentTone++;
+	current_tone++;
 }
 
-void buzzerPlay(enum BuzzerMelody aTone) {
-	memcpy_P(&currentSound, melodies + aTone, sizeof(const struct melody*));
-	currentTone = 0;
-	currentRepetition = 0;
-	currentLength = 0;
+void buzzer_play(enum buzzer_melody_t aTone) {
+	memcpy_P(&current_sound, melodies + aTone, sizeof(const struct melody_t*));
+	current_tone = 0;
+	current_repetition = 0;
+	current_length = 0;
 	nextNote();
 }
 
 ISR(TIMER0_COMP_vect) {
-	if (currentLength > 0) {
-		currentLength--;
+	if (current_length > 0) {
+		current_length--;
 	} else {
 		nextNote();
 	}
 }
 
-void initBuzzer(void) {
+void init_buzzer(void) {
 	TCCR0A = _BV(WGM01);		/* Generate PWM */
 	TIMSK0 = _BV(OCF0A);		/* Interrupt on compare */
-	(void)buzzerOn;
+	(void)buzzer_on;
 }
 

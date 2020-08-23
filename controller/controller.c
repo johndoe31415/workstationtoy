@@ -45,7 +45,7 @@ int main() {
 	initHAL();
 	initRs232();
 	initSPI();
-	initBuzzer();
+	init_buzzer();
 
 	/* Then activate interrupts */
 	sei();
@@ -72,8 +72,8 @@ int main() {
 	}
 
 
-//	buzzerPlay(BUZZER_SIMPLE_ERROR);
-	buzzerPlay(BUZZER_NOTIFICATION);
+//	buzzer_play(BUZZER_SIMPLE_ERROR);
+	buzzer_play(BUZZER_NOTIFICATION);
 
 	/* Enter GUI loop */
 	guiLoop();
