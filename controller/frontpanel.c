@@ -7,12 +7,12 @@
 #include "spi.h"
 #include "delay.h"
 
-struct ledPattern {
+struct led_pattern_t {
 	uint16_t green;
 	uint16_t red;
 };
 
-static const struct ledPattern patterns[] PROGMEM = {
+static const struct led_pattern_t patterns[] PROGMEM = {
 	[STATE_OFF] = {
 		.green	= 0x0000,
 		.red	= 0x0000,
@@ -39,13 +39,13 @@ static const struct ledPattern patterns[] PROGMEM = {
 	},
 };
 
-static void ledStateToPattern(enum FrontpanelLEDState aState, struct ledPattern *aPattern) {
-	memcpy_P(aPattern, patterns + aState, sizeof(struct ledPattern));
+static void led_state_to_pattern(enum FrontpanelLEDState aState, struct led_pattern_t *aPattern) {
+	memcpy_P(aPattern, patterns + aState, sizeof(struct led_pattern_t));
 }
 
 void setLED(enum fpEnum_ledIndex aLED, enum FrontpanelLEDState aState) {
-	struct ledPattern pattern;
-	ledStateToPattern(aState, &pattern);
+	struct led_pattern_t pattern;
+	led_state_to_pattern(aState, &pattern);
 
 	struct fpCmd_SetLEDPattern cmd;
 	memset(&cmd, 0, sizeof(cmd));
@@ -57,7 +57,7 @@ void setLED(enum fpEnum_ledIndex aLED, enum FrontpanelLEDState aState) {
 	spiTransmitToSlave(SLAVE_FRONTPANEL, &cmd, sizeof(cmd), sizeof(cmd.master), FP_SETLEDPATTERN_DELAY_US);
 }
 
-static void ledTestSpecific(enum fpEnum_ledIndex aLED) {
+static void led_test_specific(enum fpEnum_ledIndex aLED) {
 	setLED(aLED, STATE_GREEN);
 	delay_millis(500);
 	setLED(aLED, STATE_RED);
@@ -68,16 +68,16 @@ static void ledTestSpecific(enum fpEnum_ledIndex aLED) {
 }
 
 void ledTest(void) {
-	ledTestSpecific(LED_OPERATION);
-	ledTestSpecific(LED_ERROR);
-	ledTestSpecific(LED_AUTOMATIC_SHUTDOWN);
-	ledTestSpecific(LED_TEMPERATURE);
-	ledTestSpecific(LED_PROTECTIVE_EARTH);
-	ledTestSpecific(LED_PHASE_ERROR);
-	ledTestSpecific(LED_OVERCURRENT);
-	ledTestSpecific(LED_AUTO_TRANSFORMER);
-	ledTestSpecific(LED_ISOLATION_TRANSFORMER);
-	ledTestSpecific(LED_OUTPUT);
+	led_test_specific(LED_OPERATION);
+	led_test_specific(LED_ERROR);
+	led_test_specific(LED_AUTOMATIC_SHUTDOWN);
+	led_test_specific(LED_TEMPERATURE);
+	led_test_specific(LED_PROTECTIVE_EARTH);
+	led_test_specific(LED_PHASE_ERROR);
+	led_test_specific(LED_OVERCURRENT);
+	led_test_specific(LED_AUTO_TRANSFORMER);
+	led_test_specific(LED_ISOLATION_TRANSFORMER);
+	led_test_specific(LED_OUTPUT);
 }
 
 struct KeyboardEvent getFrontpanelKey(void) {
