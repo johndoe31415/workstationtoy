@@ -130,4 +130,25 @@
 		<description value="Buzzer" />
 	</portpin>
 
+	<portpin name="PB5" template="digoutput">
+		<description value="Voltmeter" />
+	</portpin>
+
+	<portpin name="PF3" template="digswitchinput">
+		<description value="Switch_On" />
+	</portpin>
+	<portpin name="PF4" template="digswitchinput">
+		<description value="Switch_Off" />
+	</portpin>
+	<portpin name="PF5" template="digswitchinput">
+		<description value="Switch_EmergencyOff" />
+	</portpin>
+
+	<portpin name="PA0" template="digoutput">
+		<description value="TripRCD1" />
+	</portpin>
+	<portpin name="PA1" template="digoutput">
+		<description value="TripRCD2" />
+	</portpin>
+
 </HAL>

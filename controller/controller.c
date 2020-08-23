@@ -41,6 +41,16 @@ static void set_relay_state(uint16_t value) {
 	}
 }
 
+static void trip_rcd(void) {
+	TripRCD1_SetInactive();
+	TripRCD2_SetActive();
+	delay_millis(100);
+	TripRCD1_SetActive();
+	TripRCD2_SetInactive();
+	delay_millis(100);
+	TripRCD1_SetInactive();
+}
+
 int main(void) {
 	initHAL();
 	initRs232();
@@ -52,6 +62,21 @@ int main(void) {
 
 	/* Enable "active" LED */
 	setLED(LED_OPERATION, STATE_GREEN);
+
+//	buzzer_play(BUZZER_NOTIFICATION);
+
+	while (true) {
+		/*
+//		Voltmeter_Toggle();
+		setLED(LED_OPERATION, STATE_RED);
+
+			trip_rcd();
+			*/
+	}
+
+
+
+#if 0
 	set_relay_state(0xffff);
 	delay_millis(1000);
 	uint16_t x = 0xaaaa;
@@ -70,10 +95,9 @@ int main(void) {
 		}
 		*/
 	}
-
+#endif
 
 //	buzzer_play(BUZZER_SIMPLE_ERROR);
-	buzzer_play(BUZZER_NOTIFICATION);
 
 	/* Enter GUI loop */
 	guiLoop();

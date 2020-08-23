@@ -1,7 +1,7 @@
 /* Automatically generated HAL from hal.xml */
 /* NEVER EDIT MANUALLY */
 
-/* Generated on: 2020-08-23 11:11:08 */
+/* Generated on: 2020-08-23 17:49:37 */
 
 #ifndef __HAL_H__
 #define __HAL_H__
@@ -496,6 +496,114 @@
 #define Buzzer_IsActive()                        (Buzzer_Get() != 0)
 #define Buzzer_Init()                            { Buzzer_SetInactive(); Buzzer_ModeOutput(); }
 
+/* Voltmeter -> PB5 (Output, Initially Inactive) */
+#define Voltmeter_BIT                            5
+#define Voltmeter_PIN                            PINB
+#define Voltmeter_PORT                           PORTB
+#define Voltmeter_DDR                            DDRB
+#define Voltmeter_ModeOutput()                   Voltmeter_DDR |= _BV(Voltmeter_BIT)
+#define Voltmeter_IsOutput()                     ((Voltmeter_DDR & _BV(Voltmeter_BIT)) != 0)
+#define Voltmeter_SetHIGH()                      Voltmeter_PORT |= _BV(Voltmeter_BIT)
+#define Voltmeter_SetLOW()                       Voltmeter_PORT &= ~_BV(Voltmeter_BIT)
+#define Voltmeter_Get()                          (Voltmeter_PIN & _BV(Voltmeter_BIT))
+#define Voltmeter_SetInactive()                  Voltmeter_SetLOW()
+#define Voltmeter_SetActive()                    Voltmeter_SetHIGH()
+#define Voltmeter_Toggle()                       Voltmeter_PORT ^= _BV(Voltmeter_BIT)
+#define Voltmeter_SetConditional(condition)      if (condition) Voltmeter_SetActive(); else Voltmeter_SetInactive()
+#define Voltmeter_SetConditionalToggle(conditionon, conditionoff, conditiontoggle) if (conditionon) { Voltmeter_SetActive(); } else if (conditionoff) { Voltmeter_SetInactive(); } else if (conditiontoggle) { Voltmeter_Toggle(); }
+#define Voltmeter_Pulse()                        { Voltmeter_SetActive(); Voltmeter_SetInactive(); }
+#define Voltmeter_PulseNop()                     { Voltmeter_SetActive(); nop(); Voltmeter_SetInactive(); }
+#define Voltmeter_IsInactive()                   (Voltmeter_Get() == 0)
+#define Voltmeter_IsActive()                     (Voltmeter_Get() != 0)
+#define Voltmeter_Init()                         { Voltmeter_SetInactive(); Voltmeter_ModeOutput(); }
+
+/* Switch_On -> PF3 (Input, Initially Pullup On, Active-Low) */
+#define Switch_On_BIT                            3
+#define Switch_On_PIN                            PINF
+#define Switch_On_PORT                           PORTF
+#define Switch_On_DDR                            DDRF
+#define Switch_On_SetPullupActive()              Switch_On_PORT |= _BV(Switch_On_BIT)
+#define Switch_On_SetPullupInactive()            Switch_On_PORT &= ~_BV(Switch_On_BIT)
+#define Switch_On_ModeInput()                    Switch_On_DDR &= ~_BV(Switch_On_BIT)
+#define Switch_On_IsInput()                      ((Switch_On_DDR & _BV(Switch_On_BIT)) == 0)
+#define Switch_On_Get()                          (Switch_On_PIN & _BV(Switch_On_BIT))
+#define Switch_On_GetBit()                       (Switch_On_Get() >> Switch_On_BIT)
+#define Switch_On_IsInactive()                   (Switch_On_Get() != 0)
+#define Switch_On_IsActive()                     (Switch_On_Get() == 0)
+#define Switch_On_Init()                         { Switch_On_SetPullupActive(); Switch_On_ModeInput(); }
+
+/* Switch_Off -> PF4 (Input, Initially Pullup On, Active-Low) */
+#define Switch_Off_BIT                           4
+#define Switch_Off_PIN                           PINF
+#define Switch_Off_PORT                          PORTF
+#define Switch_Off_DDR                           DDRF
+#define Switch_Off_SetPullupActive()             Switch_Off_PORT |= _BV(Switch_Off_BIT)
+#define Switch_Off_SetPullupInactive()           Switch_Off_PORT &= ~_BV(Switch_Off_BIT)
+#define Switch_Off_ModeInput()                   Switch_Off_DDR &= ~_BV(Switch_Off_BIT)
+#define Switch_Off_IsInput()                     ((Switch_Off_DDR & _BV(Switch_Off_BIT)) == 0)
+#define Switch_Off_Get()                         (Switch_Off_PIN & _BV(Switch_Off_BIT))
+#define Switch_Off_GetBit()                      (Switch_Off_Get() >> Switch_Off_BIT)
+#define Switch_Off_IsInactive()                  (Switch_Off_Get() != 0)
+#define Switch_Off_IsActive()                    (Switch_Off_Get() == 0)
+#define Switch_Off_Init()                        { Switch_Off_SetPullupActive(); Switch_Off_ModeInput(); }
+
+/* Switch_EmergencyOff -> PF5 (Input, Initially Pullup On, Active-Low) */
+#define Switch_EmergencyOff_BIT                  5
+#define Switch_EmergencyOff_PIN                  PINF
+#define Switch_EmergencyOff_PORT                 PORTF
+#define Switch_EmergencyOff_DDR                  DDRF
+#define Switch_EmergencyOff_SetPullupActive()    Switch_EmergencyOff_PORT |= _BV(Switch_EmergencyOff_BIT)
+#define Switch_EmergencyOff_SetPullupInactive()  Switch_EmergencyOff_PORT &= ~_BV(Switch_EmergencyOff_BIT)
+#define Switch_EmergencyOff_ModeInput()          Switch_EmergencyOff_DDR &= ~_BV(Switch_EmergencyOff_BIT)
+#define Switch_EmergencyOff_IsInput()            ((Switch_EmergencyOff_DDR & _BV(Switch_EmergencyOff_BIT)) == 0)
+#define Switch_EmergencyOff_Get()                (Switch_EmergencyOff_PIN & _BV(Switch_EmergencyOff_BIT))
+#define Switch_EmergencyOff_GetBit()             (Switch_EmergencyOff_Get() >> Switch_EmergencyOff_BIT)
+#define Switch_EmergencyOff_IsInactive()         (Switch_EmergencyOff_Get() != 0)
+#define Switch_EmergencyOff_IsActive()           (Switch_EmergencyOff_Get() == 0)
+#define Switch_EmergencyOff_Init()               { Switch_EmergencyOff_SetPullupActive(); Switch_EmergencyOff_ModeInput(); }
+
+/* TripRCD1 -> PA0 (Output, Initially Inactive) */
+#define TripRCD1_BIT                             0
+#define TripRCD1_PIN                             PINA
+#define TripRCD1_PORT                            PORTA
+#define TripRCD1_DDR                             DDRA
+#define TripRCD1_ModeOutput()                    TripRCD1_DDR |= _BV(TripRCD1_BIT)
+#define TripRCD1_IsOutput()                      ((TripRCD1_DDR & _BV(TripRCD1_BIT)) != 0)
+#define TripRCD1_SetHIGH()                       TripRCD1_PORT |= _BV(TripRCD1_BIT)
+#define TripRCD1_SetLOW()                        TripRCD1_PORT &= ~_BV(TripRCD1_BIT)
+#define TripRCD1_Get()                           (TripRCD1_PIN & _BV(TripRCD1_BIT))
+#define TripRCD1_SetInactive()                   TripRCD1_SetLOW()
+#define TripRCD1_SetActive()                     TripRCD1_SetHIGH()
+#define TripRCD1_Toggle()                        TripRCD1_PORT ^= _BV(TripRCD1_BIT)
+#define TripRCD1_SetConditional(condition)       if (condition) TripRCD1_SetActive(); else TripRCD1_SetInactive()
+#define TripRCD1_SetConditionalToggle(conditionon, conditionoff, conditiontoggle) if (conditionon) { TripRCD1_SetActive(); } else if (conditionoff) { TripRCD1_SetInactive(); } else if (conditiontoggle) { TripRCD1_Toggle(); }
+#define TripRCD1_Pulse()                         { TripRCD1_SetActive(); TripRCD1_SetInactive(); }
+#define TripRCD1_PulseNop()                      { TripRCD1_SetActive(); nop(); TripRCD1_SetInactive(); }
+#define TripRCD1_IsInactive()                    (TripRCD1_Get() == 0)
+#define TripRCD1_IsActive()                      (TripRCD1_Get() != 0)
+#define TripRCD1_Init()                          { TripRCD1_SetInactive(); TripRCD1_ModeOutput(); }
+
+/* TripRCD2 -> PA1 (Output, Initially Inactive) */
+#define TripRCD2_BIT                             1
+#define TripRCD2_PIN                             PINA
+#define TripRCD2_PORT                            PORTA
+#define TripRCD2_DDR                             DDRA
+#define TripRCD2_ModeOutput()                    TripRCD2_DDR |= _BV(TripRCD2_BIT)
+#define TripRCD2_IsOutput()                      ((TripRCD2_DDR & _BV(TripRCD2_BIT)) != 0)
+#define TripRCD2_SetHIGH()                       TripRCD2_PORT |= _BV(TripRCD2_BIT)
+#define TripRCD2_SetLOW()                        TripRCD2_PORT &= ~_BV(TripRCD2_BIT)
+#define TripRCD2_Get()                           (TripRCD2_PIN & _BV(TripRCD2_BIT))
+#define TripRCD2_SetInactive()                   TripRCD2_SetLOW()
+#define TripRCD2_SetActive()                     TripRCD2_SetHIGH()
+#define TripRCD2_Toggle()                        TripRCD2_PORT ^= _BV(TripRCD2_BIT)
+#define TripRCD2_SetConditional(condition)       if (condition) TripRCD2_SetActive(); else TripRCD2_SetInactive()
+#define TripRCD2_SetConditionalToggle(conditionon, conditionoff, conditiontoggle) if (conditionon) { TripRCD2_SetActive(); } else if (conditionoff) { TripRCD2_SetInactive(); } else if (conditiontoggle) { TripRCD2_Toggle(); }
+#define TripRCD2_Pulse()                         { TripRCD2_SetActive(); TripRCD2_SetInactive(); }
+#define TripRCD2_PulseNop()                      { TripRCD2_SetActive(); nop(); TripRCD2_SetInactive(); }
+#define TripRCD2_IsInactive()                    (TripRCD2_Get() == 0)
+#define TripRCD2_IsActive()                      (TripRCD2_Get() != 0)
+#define TripRCD2_Init()                          { TripRCD2_SetInactive(); TripRCD2_ModeOutput(); }
+
 #define initHAL() {\
 		RS232_RX_Init();\
 		RS232_TX_Init();\
@@ -521,6 +629,12 @@
 		Rel12_Init();\
 		Output5V_Init();\
 		Buzzer_Init();\
+		Voltmeter_Init();\
+		Switch_On_Init();\
+		Switch_Off_Init();\
+		Switch_EmergencyOff_Init();\
+		TripRCD1_Init();\
+		TripRCD2_Init();\
 }
 
 #endif
