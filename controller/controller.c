@@ -44,7 +44,7 @@ static void set_relay_state(uint16_t value) {
 int main(void) {
 	initHAL();
 	initRs232();
-	initSPI();
+	init_spi();
 	init_buzzer();
 
 	/* Then activate interrupts */

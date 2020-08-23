@@ -13,7 +13,7 @@
 
 static int rs232PutChar(char aChar, FILE *aStream);
 
-uint16_t crctest(const uint8_t *a, uint8_t b);
+uint16_t crc_test(const uint8_t *a, uint8_t b);
 
 ISR(USART1_RX_vect) {
 	volatile uint8_t data = UDR1;

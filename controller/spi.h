@@ -27,12 +27,12 @@ struct SPIEndpoint {
 void spiDeselect(void);
 struct SPIEndpoint spiGetCurrentEndpoint(void);
 void spiSelectSlave(enum SPIAccessMode aMode, enum SPISpeed aSpeed);
-void spiTransmit(void *aData, uint8_t aLength);
-void spiTransmitWithPause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteCount, uint16_t aDelayMicros);
-uint16_t crctest(const uint8_t *a, uint8_t b);
-void spiTransmissionGenerateCRC(void *aData, uint8_t aMasterLength);
-bool spiTransmitToSlave(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros);
-void initSPI(void);
+void spi_tx(void *aData, uint8_t aLength);
+void spi_tx_pause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteCount, uint16_t aDelayMicros);
+uint16_t crc_test(const uint8_t *a, uint8_t b);
+void spi_tx_fill_crc(void *aData, uint8_t aMasterLength);
+bool spi_tx_to_slave(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros);
+void init_spi(void);
 /***************  AUTO GENERATED SECTION ENDS   ***************/
 
 #endif

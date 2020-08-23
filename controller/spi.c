@@ -56,26 +56,26 @@ void spiSelectSlave(enum SPIAccessMode aMode, enum SPISpeed aSpeed) {
 	selectedEndpoint.mode = aMode;
 }
 
-static uint8_t spiTransmitByte(uint8_t aByte) {
+static uint8_t spi_tx_byte(uint8_t aByte) {
 	SPDR = aByte;
 	while (!(SPSR & _BV(SPIF)));
 	return SPDR;
 }
 
-void spiTransmit(void *aData, uint8_t aLength) {
+void spi_tx(void *aData, uint8_t aLength) {
 	uint8_t *data = (uint8_t*)aData;
 	for (uint8_t i = 0; i < aLength; i++) {
-		data[i] = spiTransmitByte(data[i]);
+		data[i] = spi_tx_byte(data[i]);
 	}
 }
 
-void spiTransmitWithPause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteCount, uint16_t aDelayMicros) {
+void spi_tx_pause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteCount, uint16_t aDelayMicros) {
 	uint8_t *data = (uint8_t*)aData;
 	for (uint8_t i = 0; i < aLength; i++) {
 		if (i == aPauseAfterByteCount) {
 			delayMicroseconds(aDelayMicros);
 		}
-		uint8_t rxByte = spiTransmitByte(data[i]);
+		uint8_t rxByte = spi_tx_byte(data[i]);
 		if (i >= aPauseAfterByteCount) {
 			data[i] = rxByte;
 		}
@@ -83,43 +83,43 @@ void spiTransmitWithPause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteC
 	}
 }
 
-static uint16_t crcByte(uint16_t aCRC, uint8_t aDataByte) {
+static uint16_t crc_calc_byte(uint16_t aCRC, uint8_t aDataByte) {
 	return _crc_ccitt_update(aCRC, aDataByte);
 }
 
-static uint16_t crcData(uint16_t aInitialCRC, const void *aData, uint8_t aLength) {
+static uint16_t crc_calc_data(uint16_t aInitialCRC, const void *aData, uint8_t aLength) {
 	uint16_t crc = aInitialCRC;
 	for (uint8_t i = 0; i < aLength; i++) {
-		crc = crcByte(crc, ((uint8_t*)aData)[i]);
+		crc = crc_calc_byte(crc, ((uint8_t*)aData)[i]);
 	}
 	return crc;
 }
 
-uint16_t crctest(const uint8_t *a, uint8_t b) {
-	return crcData(CRC_INITIAL_VALUE, a, b);
+uint16_t crc_test(const uint8_t *a, uint8_t b) {
+	return crc_calc_data(CRC_INITIAL_VALUE, a, b);
 }
 
-void spiTransmissionGenerateCRC(void *aData, uint8_t aMasterLength) {
-	uint16_t crcValue = crcByte(CRC_INITIAL_VALUE, ((uint8_t*)aData)[0]);
-	crcValue = crcData(crcValue, (uint8_t*)aData + 3, aMasterLength - 3);
+void spi_tx_fill_crc(void *aData, uint8_t aMasterLength) {
+	uint16_t crcValue = crc_calc_byte(CRC_INITIAL_VALUE, ((uint8_t*)aData)[0]);
+	crcValue = crc_calc_data(crcValue, (uint8_t*)aData + 3, aMasterLength - 3);
 	*((uint16_t*)(aData + 1)) = crcValue;
 }
 
-static bool spiTransmitToSlaveRaw(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros) {
-	spiTransmissionGenerateCRC(aData, aMasterLength);
+static bool spi_tx_to_slave_raw(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros) {
+	spi_tx_fill_crc(aData, aMasterLength);
 
-	spiTransmitWithPause(aData, aLength, aMasterLength, aDelayMicros);
+	spi_tx_pause(aData, aLength, aMasterLength, aDelayMicros);
 	spiDeselect();
 
-	uint16_t rxCRC = crcData(CRC_INITIAL_VALUE, aData + aMasterLength, aLength - aMasterLength - 2);
+	uint16_t rxCRC = crc_calc_data(CRC_INITIAL_VALUE, aData + aMasterLength, aLength - aMasterLength - 2);
 	bool receivedOK = *((uint16_t*)(aData + aLength - 2)) == rxCRC;
 
 	return receivedOK;
 }
 
-bool spiTransmitToSlave(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros) {
+bool spi_tx_to_slave(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros) {
 	for (uint8_t tryNo = 0; tryNo < 3; tryNo++) {
-		bool success = spiTransmitToSlaveRaw(aData, aLength, aMasterLength, aDelayMicros);
+		bool success = spi_tx_to_slave_raw(aData, aLength, aMasterLength, aDelayMicros);
 		if (success) {
 			return true;
 		}
@@ -128,7 +128,7 @@ bool spiTransmitToSlave(void *aData, uint8_t aLength, uint8_t aMasterLength, uin
 	return false;
 }
 
-void initSPI(void) {
+void init_spi(void) {
 	SPCR = _BV(SPE) | _BV(MSTR);
 }
 
