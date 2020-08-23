@@ -11,7 +11,7 @@
 #include "buzzer.h"
 #include "frontpanel.h"
 
-static int rs232_putchar(char aChar, FILE *aStream);
+static int rs232_putchar(char character, FILE *file_stream);
 
 uint16_t crc_test(const uint8_t *a, uint8_t b);
 
@@ -36,14 +36,17 @@ static void rs232_init_stdout(void) {
 	stdout = &uartStdout;
 }
 
-static int rs232_putchar(char aChar, FILE *aStream) {
-	rs232_tx_char(aChar);
+static int rs232_putchar(char character, FILE *file_stream) {
+	if (character == '\n') {
+		rs232_tx_char('\r');
+	}
+	rs232_tx_char(character);
 	return 1;
 }
 
-void rs232_tx_char(unsigned char aChar) {
+void rs232_tx_char(unsigned char character) {
 	while (!(UCSR1A & _BV(UDRE1)));		/* Wait until data register empty */
-	UDR1 = aChar;
+	UDR1 = character;
 }
 
 void init_rs232(void) {

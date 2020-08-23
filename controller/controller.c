@@ -5,6 +5,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 
 #include "delay.h"
 #include "hal.h"
@@ -64,16 +65,8 @@ int main(void) {
 //	buzzer_play(BUZZER_NOTIFICATION);
 
 	while (true) {
-//		Voltmeter_Toggle();
-		fp_set_led(LED_OPERATION, STATE_RED);
+		printf_P(PSTR("TIMSK0 %x UCSR1A %x\n"), TIMSK0, UCSR1A);
 		delay_millis(500);
-		fp_set_led(LED_OPERATION, STATE_GREEN);
-		delay_millis(500);
-
-		/*
-
-			trip_rcd();
-			*/
 	}
 
 

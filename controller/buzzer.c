@@ -145,5 +145,5 @@ ISR(TIMER0_COMP_vect) {
 
 void init_buzzer(void) {
 	TCCR0A = _BV(WGM01);		/* Generate PWM */
-	TIMSK0 = _BV(OCF0A);		/* Interrupt on compare */
+	TIMSK0 |= _BV(OCF0A);		/* Interrupt on compare */
 }
