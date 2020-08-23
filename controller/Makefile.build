@@ -7,14 +7,13 @@ MCU_UNIT := at90can128
 
 # Source files
 OBJS := \
-	Buzzer.o \
-	Delay.o \
-	Frontpanel.o \
-	GUI.o \
+	buzzer.o \
+	delay.o \
+	frontpanel.o \
+	gui.o \
 	$(PROJNAME).o \
-	RelaySwitcher.o \
-	RS232.o \
-	SPI.o
+	rs232.o \
+	spi.o
 
 LIBOBJS :=
 

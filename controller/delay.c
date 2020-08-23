@@ -1,6 +1,6 @@
 #include <util/delay.h>
 
-#include "Delay.h"
+#include "delay.h"
 
 void delayMillis(uint16_t aMillis) {
 	while (aMillis--) {

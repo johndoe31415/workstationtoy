@@ -3,13 +3,13 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 
-#include "RS232.h"
-#include "HAL.h"
+#include "rs232.h"
+#include "hal.h"
 
 #include "../frontpanel/SPISlave.h"
-#include "SPI.h"
-#include "Buzzer.h"
-#include "Frontpanel.h"
+#include "spi.h"
+#include "buzzer.h"
+#include "frontpanel.h"
 
 static int rs232PutChar(char aChar, FILE *aStream);
 

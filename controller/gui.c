@@ -1,11 +1,10 @@
 #include <string.h>
 
-#include "GUI.h"
-#include "HAL.h"
-#include "Frontpanel.h"
-#include "RelaySwitcher.h"
-#include "Delay.h"
-#include "Buzzer.h"
+#include "gui.h"
+#include "hal.h"
+#include "frontpanel.h"
+#include "delay.h"
+#include "buzzer.h"
 
 static struct GUIState state;
 
@@ -85,33 +84,10 @@ static void updateFrontpanelLEDs(void) {
 	}
 }
 
-static void updateStateMachine(void) {
-	enum SwitchState currentState;
-	currentState = SWST_PWR_ON_IDLE;
-
-	if (state.autoShutdownState != AUTOSHTDN_SHUTTINGDOWN) {
-		bool outputEnabled = (state.outputState == OUTPUT_PERMANENTLY_ENABLED) || ((state.outputState == OUTPUT_ARMED) && state.footPedalState);
-		if (state.isoEnabled && state.autoEnabled) {
-			currentState = outputEnabled ? SWST_ISOAUTO_ON : SWST_ISOAUTO_OFF;
-		} else if (state.isoEnabled) {
-			currentState = outputEnabled ? SWST_ISO_ON : SWST_ISO_OFF;
-		} else if (state.autoEnabled) {
-			currentState = outputEnabled ? SWST_AUTO_ON : SWST_AUTO_OFF;
-		} else if (state.outputState != OUTPUT_DISABLED) {
-			currentState = outputEnabled ? SWST_MAINS_ON : SWST_MAINS_OFF;
-		}
-	} else {
-		currentState = SWST_PWR_OFF;
-	}
-
-	relaySwitchState(currentState);
-}
-
 void guiLoop(void) {
 	memset(&state, 0, sizeof(state));
 	state.outputState = OUTPUT_ARMED;	/* TODO REMOVEME */
 	updateFrontpanelLEDs();
-	updateStateMachine();
 	while (true) {
 		bool event = false;
 		event = handleFootpedal(Footpedal_IsActive()) || event;
@@ -121,11 +97,12 @@ void guiLoop(void) {
 			handleKeypress(keyPressEvent.eventType, keyPressEvent.key);
 			//logmsg("Keypress type 0x%x, key 0x%x\r\n", keyPressEvent.eventType, keyPressEvent.key);
 			event = true;
+
+			setLED(LED_PROTECTIVE_EARTH, STATE_BLINK_ORANGE_SLOW);
 		}
 
 		if (event) {
 			updateFrontpanelLEDs();
-			updateStateMachine();
 		}
 
 		delayMillis(10);

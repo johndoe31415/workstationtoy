@@ -13,7 +13,7 @@ MCU_AVRDUDE := t2313
 MCU := attiny2313
 FLASH_SIZE := $(shell expr 2 \* 1024)
 SRAM_SIZE := 128
-EEPROM_SIZE := 128
+eeprom_SIZE := 128
 DATASHEET := ATtiny2313_doc2543.pdf
 HEADERFILE := iotn2313.h
 else
@@ -22,7 +22,7 @@ MCU_AVRDUDE := t26
 MCU := attiny26
 FLASH_SIZE := $(shell expr 2 \* 1024)
 SRAM_SIZE := 128
-EEPROM_SIZE := 128
+eeprom_SIZE := 128
 DATASHEET := ATtiny26.pdf
 HEADERFILE := iotn26.h
 else
@@ -31,7 +31,7 @@ MCU_AVRDUDE := m16
 MCU := atmega16
 FLASH_SIZE := $(shell expr 16 \* 1024)
 SRAM_SIZE := $(shell expr 1 \* 1024)
-EEPROM_SIZE := 512
+eeprom_SIZE := 512
 DATASHEET := ATmega16_doc2466.pdf
 HEADERFILE := iom16.h
 else
@@ -40,7 +40,7 @@ MCU_AVRDUDE := m8
 MCU := atmega8
 FLASH_SIZE := $(shell expr 8 \* 1024)
 SRAM_SIZE := $(shell expr 1 \* 1024)
-EEPROM_SIZE := 512
+eeprom_SIZE := 512
 DATASHEET := ATmega8.pdf
 HEADERFILE := iom8.h
 else
@@ -49,7 +49,7 @@ MCU_AVRDUDE := m32
 MCU := atmega32
 FLASH_SIZE := $(shell expr 32 \* 1024)
 SRAM_SIZE := $(shell expr 2 \* 1024)
-EEPROM_SIZE := $(shell expr 1 \* 1024)
+eeprom_SIZE := $(shell expr 1 \* 1024)
 DATASHEET := ATmega32_doc2503.pdf
 HEADERFILE := iom32.h
 else
@@ -58,7 +58,7 @@ MCU_AVRDUDE := AT90S8515
 MCU := at90s8515
 FLASH_SIZE := $(shell expr 8 \* 1024)
 SRAM_SIZE := 512
-EEPROM_SIZE := 512
+eeprom_SIZE := 512
 DATASHEET := AT90S8515_doc0841.pdf
 HEADERFILE := io8515.h
 else
@@ -67,7 +67,7 @@ MCU_AVRDUDE := AT90S8535
 MCU := at90s8535
 FLASH_SIZE := $(shell expr 8 \* 1024)
 SRAM_SIZE := 512
-EEPROM_SIZE := 512
+eeprom_SIZE := 512
 DATASHEET := AT90S8535.pdf
 HEADERFILE := io8535.h
 else
@@ -76,7 +76,7 @@ MCU_AVRDUDE := c128
 MCU := at90can128
 FLASH_SIZE := $(shell expr 128 \* 1024)
 SRAM_SIZE := $(shell expr 4 \* 1024)
-EEPROM_SIZE := $(shell expr 4 \* 1024)
+eeprom_SIZE := $(shell expr 4 \* 1024)
 DATASHEET := AT90CAN128.pdf
 HEADERFILE := iocanxx.h
 else
@@ -85,7 +85,7 @@ MCU_AVRDUDE := m128
 MCU := atmega128
 FLASH_SIZE := $(shell expr 128 \* 1024)
 SRAM_SIZE := $(shell expr 4 \* 1024)
-EEPROM_SIZE := $(shell expr 4 \* 1024)
+eeprom_SIZE := $(shell expr 4 \* 1024)
 DATASHEET := ATmega128.pdf
 HEADERFILE := iom128.h
 else
@@ -94,7 +94,7 @@ MCU_AVRDUDE := x128a1
 MCU := atxmega128a1
 FLASH_SIZE := $(shell expr 128 \* 1024)
 SRAM_SIZE := $(shell expr 8 \* 1024)
-EEPROM_SIZE := $(shell expr 2 \* 1024)
+eeprom_SIZE := $(shell expr 2 \* 1024)
 DATASHEET := ATxmega128A1.pdf
 HEADERFILE := iox128a1.h
 else
@@ -103,7 +103,7 @@ MCU_AVRDUDE := x128a1
 MCU := atxmega128a1
 FLASH_SIZE := $(shell expr 8 \* 1024)
 SRAM_SIZE := $(shell expr 8 \* 1024)
-EEPROM_SIZE := $(shell expr 2 \* 1024)
+eeprom_SIZE := $(shell expr 2 \* 1024)
 DATASHEET := ATxmega128A1.pdf
 HEADERFILE := iox128a1.h
 else
@@ -125,7 +125,7 @@ endif
 
 ###################################################################################################
 
-all: $(PROJNAME) $(PROJNAME).S $(PROJNAME)_Flash.hex $(PROJNAME)_EEPROM.hex $(PROJNAME).bin $(PROJNAME).E $(PROJNAME).syms $(PROJNAME).dmp
+all: $(PROJNAME) $(PROJNAME).S $(PROJNAME)_flash.hex $(PROJNAME)_eeprom.hex $(PROJNAME).bin $(PROJNAME).E $(PROJNAME).syms $(PROJNAME).dmp
 
 halgen:
 	$(HALGEN) -a avr -o HAL.h $(HALINPUT)
@@ -142,7 +142,7 @@ showisr:
 clean:
 	rm -f $(PROJNAME) $(PROJNAME).coff $(PROJNAME).syms
 	rm -f $(PROJNAME).S $(PROJNAME).E
-	rm -f $(PROJNAME)_Flash.hex $(PROJNAME)_EEPROM.hex 
+	rm -f $(PROJNAME)_flash.hex $(PROJNAME)_eeprom.hex 
 	rm -f $(PROJNAME).bin $(PROJNAME).dmp
 	rm -f $(PROJNAME).xml $(PROJNAME).fw
 	rm -f $(OBJS)
@@ -154,8 +154,7 @@ reseteth:
 	$(FIRMWAREPUSH) -m $(BOARDMAC) --resetonly x
 
 program: $(PROJNAME).bin
-	./gen_eeprom
-	$(AVRDUDE) $(AVRDUDE_OPTS) -p $(MCU_AVRDUDE) -c $(AVRDUDE_PGMR) -U flash:w:$(PROJNAME).bin:r -U eeprom:w:eeprom.bin:r
+	$(AVRDUDE) $(AVRDUDE_OPTS) -p $(MCU_AVRDUDE) -c $(AVRDUDE_PGMR) -U flash:w:$(PROJNAME).bin:r
 
 programbootstock:
 	echo -n >$(PROJNAME).bin
@@ -306,11 +305,11 @@ $(PROJNAME).syms: $(PROJNAME).c
 $(PROJNAME): $(OBJS) $(LIBOBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(PROJNAME) $(OBJS) $(LIBOBJS)
 
-$(PROJNAME)_Flash.hex: $(PROJNAME)
-	$(OBJCOPY) -R .eeprom -O ihex --gap-fill=0xff $(PROJNAME) $(PROJNAME)_Flash.hex
+$(PROJNAME)_flash.hex: $(PROJNAME)
+	$(OBJCOPY) -R .eeprom -O ihex --gap-fill=0xff $(PROJNAME) $(PROJNAME)_flash.hex
 
-$(PROJNAME)_EEPROM.hex: $(PROJNAME)
-	-$(OBJCOPY) -j .eeprom -O ihex --gap-fill=0xff $(PROJNAME) $(PROJNAME)_EEPROM.hex
+$(PROJNAME)_eeprom.hex: $(PROJNAME)
+	-$(OBJCOPY) -j .eeprom -O ihex --gap-fill=0xff $(PROJNAME) $(PROJNAME)_eeprom.hex
 
 $(PROJNAME).bin: $(PROJNAME)
 	$(OBJCOPY) -R .eeprom -O binary --gap-fill=0xff $(PROJNAME) $(PROJNAME).bin
@@ -325,7 +324,7 @@ $(PROJNAME).dmp: $(PROJNAME)
 		}\
 	'
 
-$(PROJNAME).coff: $(PROJNAME) $(PROJNAME)_Flash.hex
+$(PROJNAME).coff: $(PROJNAME) $(PROJNAME)_flash.hex
 	$(OBJCOPY) --debugging --change-section-address .data-0x800000 --change-section-address .bss-0x800000 --change-section-address .noinit-0x800000 --change-section-address .eeprom-0x810000 -O coff-avr $< $@
 
 %.o: %.c

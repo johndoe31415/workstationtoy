@@ -6,8 +6,8 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
-#include "Delay.h"
-#include "Buzzer.h"
+#include "delay.h"
+#include "buzzer.h"
 
 #define UINT32(x)							((uint32_t)(x))
 #define ROUNDDIV(a, b)						(((a) + ((b) / 2)) / (b))

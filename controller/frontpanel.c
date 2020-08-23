@@ -3,9 +3,9 @@
 
 #include <avr/pgmspace.h>
 
-#include "Frontpanel.h"
-#include "SPI.h"
-#include "Delay.h"
+#include "frontpanel.h"
+#include "spi.h"
+#include "delay.h"
 
 struct ledPattern {
 	uint16_t green;

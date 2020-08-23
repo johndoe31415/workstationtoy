@@ -7,9 +7,9 @@
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
-#include "SPI.h"
-#include "HAL.h"
-#include "Delay.h"
+#include "spi.h"
+#include "hal.h"
+#include "delay.h"
 
 #define DEBUG_SPI_TRANSMITS
 #define SPI_SLAVE_DEFAULT_SEQUENCE_NUMBER						0xa5

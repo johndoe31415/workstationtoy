@@ -2,6 +2,15 @@
 .*.swp
 __pycache__
 
+controller/controller
+controller/controller.E
+controller/controller.S
+controller/controller.bin
+controller/controller.dmp
+controller/controller.syms
+controller/controller_eeprom.hex
+controller/controller_flash.hex
+
 frontpanel/frontpanel
 frontpanel/frontpanel.E
 frontpanel/frontpanel.S
@@ -10,13 +19,3 @@ frontpanel/frontpanel.dmp
 frontpanel/frontpanel.syms
 frontpanel/frontpanel_EEPROM.hex
 frontpanel/frontpanel_Flash.hex
-
-controller/controller
-controller/controller.E
-controller/controller.S
-controller/controller.bin
-controller/controller.dmp
-controller/controller.syms
-controller/controller_EEPROM.hex
-controller/controller_Flash.hex
-controller/eeprom.bin
