@@ -3,13 +3,6 @@
 
 #include <avr/io.h>
 
-enum SPISlave {
-	SLAVE_FRONTPANEL = 0,
-	SLAVE_VOLTAGEMON = 1,
-	SLAVE_CURRENTMON = 2,
-	SLAVE_NONE = 3,
-};
-
 enum SPIAccessMode {
 	SPIACCESS_PGM,
 	SPIACCESS_OPERATION,
@@ -26,7 +19,6 @@ enum SPISpeed {
 };
 
 struct SPIEndpoint {
-	enum SPISlave slave;
 	enum SPIAccessMode mode;
 	enum SPISpeed speed;
 };
@@ -34,15 +26,12 @@ struct SPIEndpoint {
 /*************** AUTO GENERATED SECTION FOLLOWS ***************/
 void spiDeselect(void);
 struct SPIEndpoint spiGetCurrentEndpoint(void);
-void spiSelectSlave(enum SPISlave aSlave, enum SPIAccessMode aMode, enum SPISpeed aSpeed);
-void selectDefaultSPISlave(enum SPISlave aSlave);
+void spiSelectSlave(enum SPIAccessMode aMode, enum SPISpeed aSpeed);
 void spiTransmit(void *aData, uint8_t aLength);
 void spiTransmitWithPause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteCount, uint16_t aDelayMicros);
 uint16_t crctest(const uint8_t *a, uint8_t b);
 void spiTransmissionGenerateCRC(void *aData, uint8_t aMasterLength);
-bool spiTransmitToSlave(enum SPISlave aSlave, void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros);
-const char* spiGetSlaveName(enum SPISlave aSlave);
-const char* spiGetSelectedSlaveName(void);
+bool spiTransmitToSlave(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros);
 void initSPI(void);
 /***************  AUTO GENERATED SECTION ENDS   ***************/
 

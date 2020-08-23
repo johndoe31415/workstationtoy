@@ -54,7 +54,7 @@ void setLED(enum fpEnum_ledIndex aLED, enum FrontpanelLEDState aState) {
 	cmd.master.patternRed = pattern.red;
 	cmd.master.patternGreen = pattern.green;
 
-	spiTransmitToSlave(SLAVE_FRONTPANEL, &cmd, sizeof(cmd), sizeof(cmd.master), FP_SETLEDPATTERN_DELAY_US);
+	spiTransmitToSlave(&cmd, sizeof(cmd), sizeof(cmd.master), FP_SETLEDPATTERN_DELAY_US);
 }
 
 static void led_test_specific(enum fpEnum_ledIndex aLED) {
@@ -84,7 +84,7 @@ struct KeyboardEvent getFrontpanelKey(void) {
 	struct fpCmd_ReadKeyboard cmd;
 	memset(&cmd, 0, sizeof(cmd));
 	cmd.master.cmdId = FP_READKEYBOARD_CMDID;
-	spiTransmitToSlave(SLAVE_FRONTPANEL, &cmd, sizeof(cmd), sizeof(cmd.master), FP_READKEYBOARD_DELAY_US);
+	spiTransmitToSlave(&cmd, sizeof(cmd), sizeof(cmd.master), FP_READKEYBOARD_DELAY_US);
 
 	struct KeyboardEvent returnValue;
 	returnValue.eventType = cmd.slave.keyboardEvent;
