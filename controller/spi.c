@@ -165,7 +165,7 @@ bool spiTransmitToSlave(enum SPISlave aSlave, void *aData, uint8_t aLength, uint
 		if (success) {
 			return true;
 		}
-		delayMillis(1);
+		delay_millis(1);
 	}
 	return false;
 }

@@ -59,11 +59,11 @@ void setLED(enum fpEnum_ledIndex aLED, enum FrontpanelLEDState aState) {
 
 static void ledTestSpecific(enum fpEnum_ledIndex aLED) {
 	setLED(aLED, STATE_GREEN);
-	delayMillis(500);
+	delay_millis(500);
 	setLED(aLED, STATE_RED);
-	delayMillis(500);
+	delay_millis(500);
 	setLED(aLED, STATE_ORANGE);
-	delayMillis(500);
+	delay_millis(500);
 	setLED(aLED, STATE_OFF);
 }
 

@@ -3,12 +3,11 @@
 
 #include <stdint.h>
 
-#define delayMicroseconds(x)		delayMicroseconds1376((x) * 125UL / 172UL)
+#define delayMicroseconds(x)		delay_1_376_us((x) * 125UL / 172UL)
 
 /*************** AUTO GENERATED SECTION FOLLOWS ***************/
-void delayMillis(uint16_t aMillis);
-void delayMicroseconds1376(uint16_t aMicros);
-void delayNop(uint16_t aRepetitions);
+void delay_millis(uint16_t aMillis);
+void delay_1_376_us(uint16_t aMicros);
 /***************  AUTO GENERATED SECTION ENDS   ***************/
 
 #endif

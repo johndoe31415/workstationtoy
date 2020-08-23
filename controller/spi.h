@@ -38,7 +38,8 @@ void spiSelectSlave(enum SPISlave aSlave, enum SPIAccessMode aMode, enum SPISpee
 void selectDefaultSPISlave(enum SPISlave aSlave);
 void spiTransmit(void *aData, uint8_t aLength);
 void spiTransmitWithPause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteCount, uint16_t aDelayMicros);
-void spiTransmisisonGenerateCRC(void *aData, uint8_t aMasterLength);
+uint16_t crctest(const uint8_t *a, uint8_t b);
+void spiTransmissionGenerateCRC(void *aData, uint8_t aMasterLength);
 bool spiTransmitToSlave(enum SPISlave aSlave, void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros);
 const char* spiGetSlaveName(enum SPISlave aSlave);
 const char* spiGetSelectedSlaveName(void);

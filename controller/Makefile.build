@@ -18,7 +18,7 @@ OBJS := \
 LIBOBJS :=
 
 # Build options
-CFLAGS = -std=c11 -Wall -Werror -Wunused -Wuninitialized -Wno-inline -Woverflow -Os -fshort-enums -mmcu=$(MCU) -DF_CPU=$(MCU_CLOCK)UL -g -DSPI_MASTER 
+CFLAGS = -std=c11 -Wall -Wmissing-prototypes -Wstrict-prototypes -Werror=implicit-function-declaration -Wunused -Wuninitialized -Wno-inline -Woverflow -Os -fshort-enums -mmcu=$(MCU) -DF_CPU=$(MCU_CLOCK)UL -g -DSPI_MASTER
 
 HALINPUT := HAL.xml
 

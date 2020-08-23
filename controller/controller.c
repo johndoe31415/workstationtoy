@@ -41,7 +41,7 @@ static void set_relay_state(uint16_t value) {
 	}
 }
 
-int main() {
+int main(void) {
 	initHAL();
 	initRs232();
 	initSPI();
@@ -53,7 +53,7 @@ int main() {
 	/* Enable "active" LED */
 	setLED(LED_OPERATION, STATE_GREEN);
 	set_relay_state(0xffff);
-	delayMillis(1000);
+	delay_millis(1000);
 	uint16_t x = 0xaaaa;
 	while (true) {
 		set_relay_state(x);
@@ -62,11 +62,11 @@ int main() {
 		if (lo) {
 			x = x ^ 58608;
 		}
-		delayMillis(100);
+		delay_millis(100);
 		/*
 		for (uint16_t i = 3500; i < (1 << 12); i++) {
 			set_relay_state(i);
-			delayMillis(100);
+			delay_millis(100);
 		}
 		*/
 	}

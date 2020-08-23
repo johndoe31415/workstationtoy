@@ -105,6 +105,6 @@ void guiLoop(void) {
 			updateFrontpanelLEDs();
 		}
 
-		delayMillis(10);
+		delay_millis(10);
 	}
 }
