@@ -21,7 +21,7 @@ struct tone_t {
 
 struct melody_t {
 	uint8_t repeat;
-	uint8_t toneCount;
+	uint8_t tone_count;
 	struct tone_t tones[];
 };
 
@@ -35,7 +35,7 @@ static const struct melody_t *current_sound;
 
 static const struct melody_t tcas_alert PROGMEM = {
 	.repeat = 4,
-	.toneCount = 10,
+	.tone_count = 10,
 	.tones = {
 		NOTE(1600, 60),
 		PAUSE(20),
@@ -52,7 +52,7 @@ static const struct melody_t tcas_alert PROGMEM = {
 
 static const struct melody_t simple_error PROGMEM = {
 	.repeat = 4,
-	.toneCount = 4,
+	.tone_count = 4,
 	.tones = {
 		NOTE(800, 60),
 		PAUSE(20),
@@ -61,9 +61,9 @@ static const struct melody_t simple_error PROGMEM = {
 	},
 };
 
-static const struct melody_t notificationMelody PROGMEM = {
+static const struct melody_t notification_melody PROGMEM = {
 	.repeat = 2,
-	.toneCount = 2,
+	.tone_count = 2,
 	.tones = {
 		NOTE(1200, 80),
 		PAUSE(80),
@@ -73,7 +73,7 @@ static const struct melody_t notificationMelody PROGMEM = {
 static const struct melody_t* const melodies[] PROGMEM = {
 	[BUZZER_CRITICAL_ERROR] = &tcas_alert,
 	[BUZZER_SIMPLE_ERROR] = &simple_error,
-	[BUZZER_NOTIFICATION] = &notificationMelody,
+	[BUZZER_NOTIFICATION] = &notification_melody,
 };
 
 static void buzzer_off(void) {
@@ -89,7 +89,7 @@ static void buzzer_on(void) {
 	TCCR0A |= _BV(COM0A0) | _BV(CS01) | _BV(CS00);
 }
 
-static void nextNote(void) {
+static void next_note(void) {
 	if (!current_sound) {
 		return;
 	}
@@ -97,7 +97,7 @@ static void nextNote(void) {
 	struct melody_t melody;
 	memcpy_P(&melody, current_sound, sizeof(struct melody_t));
 
-	if (current_tone == melody.toneCount) {
+	if (current_tone == melody.tone_count) {
 		current_tone = 0;
 		/* End of current melody */
 		if (melody.repeat > 0) {
@@ -127,19 +127,19 @@ static void nextNote(void) {
 	current_tone++;
 }
 
-void buzzer_play(enum buzzer_melody_t aTone) {
-	memcpy_P(&current_sound, melodies + aTone, sizeof(const struct melody_t*));
+void buzzer_play(enum buzzer_melody_t melody) {
+	memcpy_P(&current_sound, melodies + melody, sizeof(const struct melody_t*));
 	current_tone = 0;
 	current_repetition = 0;
 	current_length = 0;
-	nextNote();
+	next_note();
 }
 
 ISR(TIMER0_COMP_vect) {
 	if (current_length > 0) {
 		current_length--;
 	} else {
-		nextNote();
+		next_note();
 	}
 }
 
