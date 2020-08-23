@@ -38,7 +38,7 @@ struct spi_endpoint_t spi_get_current_endpoint(void) {
 	return selectedEndpoint;
 }
 
-void spiSelectSlave(enum spi_mode_t aMode, enum spi_speed_t aSpeed) {
+void spi_select_slave(enum spi_mode_t aMode, enum spi_speed_t aSpeed) {
 	savedSREGRegister = SREG;
 	cli();
 

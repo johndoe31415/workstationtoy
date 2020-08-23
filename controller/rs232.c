@@ -11,7 +11,7 @@
 #include "buzzer.h"
 #include "frontpanel.h"
 
-static int rs232PutChar(char aChar, FILE *aStream);
+static int rs232_putchar(char aChar, FILE *aStream);
 
 uint16_t crc_test(const uint8_t *a, uint8_t b);
 
@@ -32,11 +32,11 @@ ISR(USART1_RX_vect) {
 }
 
 static void rs232_init_stdout(void) {
-	static FILE uartStdout = FDEV_SETUP_STREAM(rs232PutChar, NULL, _FDEV_SETUP_WRITE);
+	static FILE uartStdout = FDEV_SETUP_STREAM(rs232_putchar, NULL, _FDEV_SETUP_WRITE);
 	stdout = &uartStdout;
 }
 
-static int rs232PutChar(char aChar, FILE *aStream) {
+static int rs232_putchar(char aChar, FILE *aStream) {
 	rs232_tx_char(aChar);
 	return 1;
 }
