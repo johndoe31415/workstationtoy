@@ -15,11 +15,7 @@
 #define SPI_SLAVE_DEFAULT_SEQUENCE_NUMBER						0xa5
 #define CRC_INITIAL_VALUE                                       0xa55a
 
-static struct spi_endpoint_t selectedEndpoint;
-static uint8_t savedSREGRegister;
-
-static void spiSetSpeed(enum spi_speed_t aSpeed) {
-	selectedEndpoint.speed = aSpeed;
+static void spi_set_speed(enum spi_speed_t aSpeed) {
 	SPCR &= ~(_BV(SPR0) | _BV(SPR1));
 	SPCR |= (aSpeed & (_BV(SPR0) | _BV(SPR1)));
 	SPSR &= ~(_BV(SPI2X));
@@ -28,54 +24,16 @@ static void spiSetSpeed(enum spi_speed_t aSpeed) {
 	}
 }
 
-void spi_deselect(void) {
-	Frontpanel_SS_SetInactive();
-	Frontpanel_RESET_SetInactive();
-	SREG = savedSREGRegister;
-}
-
-struct spi_endpoint_t spi_get_current_endpoint(void) {
-	return selectedEndpoint;
-}
-
-void spi_select_slave(enum spi_mode_t aMode, enum spi_speed_t aSpeed) {
-	savedSREGRegister = SREG;
-	cli();
-
-	if (aMode == SPIACCESS_PGM) {
-		Frontpanel_RESET_SetActive();
-	} else {
-		Frontpanel_SS_SetActive();
-	}
-
-	spiSetSpeed(aSpeed);
-	selectedEndpoint.mode = aMode;
-}
-
 static uint8_t spi_tx_byte(uint8_t aByte) {
 	SPDR = aByte;
 	while (!(SPSR & _BV(SPIF)));
 	return SPDR;
 }
 
-void spi_tx(void *aData, uint8_t aLength) {
-	uint8_t *data = (uint8_t*)aData;
+static void spi_tx(void *vdata, uint8_t aLength) {
+	uint8_t *data = (uint8_t*)vdata;
 	for (uint8_t i = 0; i < aLength; i++) {
 		data[i] = spi_tx_byte(data[i]);
-	}
-}
-
-void spi_tx_pause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteCount, uint16_t aDelayMicros) {
-	uint8_t *data = (uint8_t*)aData;
-	for (uint8_t i = 0; i < aLength; i++) {
-		if (i == aPauseAfterByteCount) {
-			delayMicroseconds(aDelayMicros);
-		}
-		uint8_t rxByte = spi_tx_byte(data[i]);
-		if (i >= aPauseAfterByteCount) {
-			data[i] = rxByte;
-		}
-		delayMicroseconds(15);
 	}
 }
 
@@ -101,11 +59,26 @@ void spi_tx_fill_crc(void *aData, uint8_t aMasterLength) {
 	*((uint16_t*)(aData + 1)) = crcValue;
 }
 
+void spi_tx_pause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteCount, uint16_t aDelayMicros) {
+	uint8_t *data = (uint8_t*)aData;
+	for (uint8_t i = 0; i < aLength; i++) {
+		if (i == aPauseAfterByteCount) {
+			delayMicroseconds(aDelayMicros);
+		}
+		uint8_t rxByte = spi_tx_byte(data[i]);
+		if (i >= aPauseAfterByteCount) {
+			data[i] = rxByte;
+		}
+		delayMicroseconds(15);
+	}
+}
+
 static bool spi_tx_to_slave_raw(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros) {
 	spi_tx_fill_crc(aData, aMasterLength);
 
+	Frontpanel_SS_SetActive();
 	spi_tx_pause(aData, aLength, aMasterLength, aDelayMicros);
-	spi_deselect();
+	Frontpanel_SS_SetInactive();
 
 	uint16_t rxCRC = crc_calc_data(CRC_INITIAL_VALUE, aData + aMasterLength, aLength - aMasterLength - 2);
 	bool receivedOK = *((uint16_t*)(aData + aLength - 2)) == rxCRC;
@@ -126,6 +99,7 @@ bool spi_tx_to_slave(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16
 
 void init_spi(void) {
 	SPCR = _BV(SPE) | _BV(MSTR);
+	spi_set_speed(SPISPEED_DIV_32);
+	Frontpanel_RESET_SetInactive();
+	Frontpanel_SS_SetInactive();
 }
-
-

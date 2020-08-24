@@ -24,11 +24,6 @@ struct spi_endpoint_t {
 };
 
 /*************** AUTO GENERATED SECTION FOLLOWS ***************/
-void spi_deselect(void);
-struct spi_endpoint_t spi_get_current_endpoint(void);
-void spi_select_slave(enum spi_mode_t aMode, enum spi_speed_t aSpeed);
-void spi_tx(void *aData, uint8_t aLength);
-void spi_tx_pause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteCount, uint16_t aDelayMicros);
 uint16_t crc_test(const uint8_t *a, uint8_t b);
 void spi_tx_fill_crc(void *aData, uint8_t aMasterLength);
 bool spi_tx_to_slave(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros);

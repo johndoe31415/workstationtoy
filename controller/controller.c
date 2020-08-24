@@ -62,7 +62,7 @@ int main(void) {
 	/* Then activate interrupts */
 	sei();
 
-//	buzzer_play(BUZZER_NOTIFICATION);
+	buzzer_play(BUZZER_NOTIFICATION);
 
 	while (true) {
 		printf_P(PSTR("TIMSK0 %x UCSR1A %x\n"), TIMSK0, UCSR1A);
