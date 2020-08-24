@@ -24,6 +24,10 @@
 			<activelow />
 		</template>
 
+		<template name="digswitchinputinv">
+			<pin type="input" initialpullup="active" />
+		</template>
+
 		<template name="digoutput">
 			<pin type="output" initialvalue="inactive" />
 		</template>
@@ -137,10 +141,10 @@
 	<portpin name="PF3" template="digswitchinput">
 		<description value="Switch_On" />
 	</portpin>
-	<portpin name="PF4" template="digswitchinput">
+	<portpin name="PF5" template="digswitchinputinv">
 		<description value="Switch_Off" />
 	</portpin>
-	<portpin name="PF5" template="digswitchinput">
+	<portpin name="PF4" template="digswitchinputinv">
 		<description value="Switch_EmergencyOff" />
 	</portpin>
 

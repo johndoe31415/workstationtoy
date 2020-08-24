@@ -1,7 +1,7 @@
 /* Automatically generated HAL from hal.xml */
 /* NEVER EDIT MANUALLY */
 
-/* Generated on: 2020-08-23 17:49:37 */
+/* Generated on: 2020-08-24 10:59:16 */
 
 #ifndef __HAL_H__
 #define __HAL_H__
@@ -532,8 +532,8 @@
 #define Switch_On_IsActive()                     (Switch_On_Get() == 0)
 #define Switch_On_Init()                         { Switch_On_SetPullupActive(); Switch_On_ModeInput(); }
 
-/* Switch_Off -> PF4 (Input, Initially Pullup On, Active-Low) */
-#define Switch_Off_BIT                           4
+/* Switch_Off -> PF5 (Input, Initially Pullup On) */
+#define Switch_Off_BIT                           5
 #define Switch_Off_PIN                           PINF
 #define Switch_Off_PORT                          PORTF
 #define Switch_Off_DDR                           DDRF
@@ -543,12 +543,12 @@
 #define Switch_Off_IsInput()                     ((Switch_Off_DDR & _BV(Switch_Off_BIT)) == 0)
 #define Switch_Off_Get()                         (Switch_Off_PIN & _BV(Switch_Off_BIT))
 #define Switch_Off_GetBit()                      (Switch_Off_Get() >> Switch_Off_BIT)
-#define Switch_Off_IsInactive()                  (Switch_Off_Get() != 0)
-#define Switch_Off_IsActive()                    (Switch_Off_Get() == 0)
+#define Switch_Off_IsInactive()                  (Switch_Off_Get() == 0)
+#define Switch_Off_IsActive()                    (Switch_Off_Get() != 0)
 #define Switch_Off_Init()                        { Switch_Off_SetPullupActive(); Switch_Off_ModeInput(); }
 
-/* Switch_EmergencyOff -> PF5 (Input, Initially Pullup On, Active-Low) */
-#define Switch_EmergencyOff_BIT                  5
+/* Switch_EmergencyOff -> PF4 (Input, Initially Pullup On) */
+#define Switch_EmergencyOff_BIT                  4
 #define Switch_EmergencyOff_PIN                  PINF
 #define Switch_EmergencyOff_PORT                 PORTF
 #define Switch_EmergencyOff_DDR                  DDRF
@@ -558,8 +558,8 @@
 #define Switch_EmergencyOff_IsInput()            ((Switch_EmergencyOff_DDR & _BV(Switch_EmergencyOff_BIT)) == 0)
 #define Switch_EmergencyOff_Get()                (Switch_EmergencyOff_PIN & _BV(Switch_EmergencyOff_BIT))
 #define Switch_EmergencyOff_GetBit()             (Switch_EmergencyOff_Get() >> Switch_EmergencyOff_BIT)
-#define Switch_EmergencyOff_IsInactive()         (Switch_EmergencyOff_Get() != 0)
-#define Switch_EmergencyOff_IsActive()           (Switch_EmergencyOff_Get() == 0)
+#define Switch_EmergencyOff_IsInactive()         (Switch_EmergencyOff_Get() == 0)
+#define Switch_EmergencyOff_IsActive()           (Switch_EmergencyOff_Get() != 0)
 #define Switch_EmergencyOff_Init()               { Switch_EmergencyOff_SetPullupActive(); Switch_EmergencyOff_ModeInput(); }
 
 /* TripRCD1 -> PA0 (Output, Initially Inactive) */

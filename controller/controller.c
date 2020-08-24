@@ -65,7 +65,7 @@ int main(void) {
 	buzzer_play(BUZZER_NOTIFICATION);
 
 	while (true) {
-		printf_P(PSTR("TIMSK0 %x UCSR1A %x\n"), TIMSK0, UCSR1A);
+		printf_P(PSTR("Switch %d %d %d\n"), Switch_On_IsActive(), Switch_Off_IsActive(), Switch_EmergencyOff_IsActive());
 		delay_millis(500);
 		fp_set_led(LED_ERROR, STATE_OFF);
 		delay_millis(500);
