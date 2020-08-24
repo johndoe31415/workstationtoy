@@ -67,6 +67,9 @@ int main(void) {
 	while (true) {
 		printf_P(PSTR("TIMSK0 %x UCSR1A %x\n"), TIMSK0, UCSR1A);
 		delay_millis(500);
+		fp_set_led(LED_ERROR, STATE_OFF);
+		delay_millis(500);
+		fp_set_led(LED_ERROR, STATE_RED);
 	}
 
 
