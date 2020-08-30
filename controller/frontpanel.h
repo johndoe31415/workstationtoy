@@ -21,6 +21,7 @@ struct btn_event_t {
 
 /*************** AUTO GENERATED SECTION FOLLOWS ***************/
 void fp_set_led(enum fpEnum_ledIndex led, enum led_state_t state);
+void fp_set_all_leds(enum led_state_t state, uint16_t delay);
 void fp_test_leds(void);
 struct btn_event_t fp_get_button_event(void);
 void init_frontpanel(void);

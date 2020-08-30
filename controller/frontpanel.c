@@ -57,6 +57,29 @@ void fp_set_led(enum fpEnum_ledIndex led, enum led_state_t state) {
 	spi_tx_to_slave(&cmd, sizeof(cmd), sizeof(cmd.master), FP_SETLEDPATTERN_DELAY_US);
 }
 
+void fp_set_all_leds(enum led_state_t state, uint16_t delay) {
+	fp_set_led(LED_OPERATION, state);
+	delay_millis(delay);
+	fp_set_led(LED_ERROR, state);
+	delay_millis(delay);
+	fp_set_led(LED_AUTOMATIC_SHUTDOWN, state);
+	delay_millis(delay);
+	fp_set_led(LED_TEMPERATURE, state);
+	delay_millis(delay);
+	fp_set_led(LED_PROTECTIVE_EARTH, state);
+	delay_millis(delay);
+	fp_set_led(LED_PHASE_ERROR, state);
+	delay_millis(delay);
+	fp_set_led(LED_OVERCURRENT, state);
+	delay_millis(delay);
+	fp_set_led(LED_AUTO_TRANSFORMER, state);
+	delay_millis(delay);
+	fp_set_led(LED_ISOLATION_TRANSFORMER, state);
+	delay_millis(delay);
+	fp_set_led(LED_OUTPUT, state);
+	delay_millis(delay);
+}
+
 static void led_test_specific(enum fpEnum_ledIndex led) {
 	fp_set_led(led, STATE_GREEN);
 	delay_millis(500);

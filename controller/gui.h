@@ -7,11 +7,18 @@
 #define AUTOSHUTDOWN_TIMEOUT_SECONDS				(2 * 3600)
 #define AUTOSHUTDOWN_TIMEOUT_GRACETIME_SECONDS		(1800)
 
+enum uimode_t {
+	MODE_BLINK_RANDOMLY
+};
+
 struct uistate_t {
+	enum uimode_t ui_mode;
+	uint16_t tick;
+	uint32_t prng_state;
 };
 
 /*************** AUTO GENERATED SECTION FOLLOWS ***************/
-void guiLoop(void);
+void ui_loop(void);
 /***************  AUTO GENERATED SECTION ENDS   ***************/
 
 #endif

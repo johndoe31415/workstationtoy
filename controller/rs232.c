@@ -18,17 +18,7 @@ uint16_t crc_test(const uint8_t *a, uint8_t b);
 ISR(USART1_RX_vect) {
 	volatile uint8_t data = UDR1;
 	(void)data;
-	rs232_tx_char(data+1);
-	switch (data) {
-
-		case 'a':
-			fp_get_button_event();
-			break;
-
-		case 'w':
-			fp_test_leds();
-			break;
-	};
+	rs232_tx_char(data);
 }
 
 static void rs232_init_stdout(void) {
