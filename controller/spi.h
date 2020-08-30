@@ -25,8 +25,9 @@ struct spi_endpoint_t {
 
 /*************** AUTO GENERATED SECTION FOLLOWS ***************/
 uint16_t crc_test(const uint8_t *a, uint8_t b);
-void spi_tx_fill_crc(void *aData, uint8_t aMasterLength);
-bool spi_tx_to_slave(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros);
+void spi_tx_fill_crc(void *data, uint8_t master_length);
+void spi_tx_pause(void *vdata, uint8_t length, uint8_t pause_after_byte_count, uint16_t delay_microseconds);
+bool spi_tx_to_slave(void *data, uint8_t length, uint8_t master_length, uint16_t delay_microseconds);
 void init_spi(void);
 /***************  AUTO GENERATED SECTION ENDS   ***************/
 

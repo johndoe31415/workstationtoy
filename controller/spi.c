@@ -15,36 +15,36 @@
 #define SPI_SLAVE_DEFAULT_SEQUENCE_NUMBER						0xa5
 #define CRC_INITIAL_VALUE                                       0xa55a
 
-static void spi_set_speed(enum spi_speed_t aSpeed) {
+static void spi_set_speed(enum spi_speed_t speed) {
 	SPCR &= ~(_BV(SPR0) | _BV(SPR1));
-	SPCR |= (aSpeed & (_BV(SPR0) | _BV(SPR1)));
+	SPCR |= (speed & (_BV(SPR0) | _BV(SPR1)));
 	SPSR &= ~(_BV(SPI2X));
-	if (aSpeed & 0x80) {
+	if (speed & 0x80) {
 		SPSR |= _BV(SPI2X);
 	}
 }
 
-static uint8_t spi_tx_byte(uint8_t aByte) {
-	SPDR = aByte;
+static uint8_t spi_tx_byte(uint8_t byte) {
+	SPDR = byte;
 	while (!(SPSR & _BV(SPIF)));
 	return SPDR;
 }
 
-static void spi_tx(void *vdata, uint8_t aLength) {
+static void spi_tx(void *vdata, uint8_t length) {
 	uint8_t *data = (uint8_t*)vdata;
-	for (uint8_t i = 0; i < aLength; i++) {
+	for (uint8_t i = 0; i < length; i++) {
 		data[i] = spi_tx_byte(data[i]);
 	}
 }
 
-static uint16_t crc_calc_byte(uint16_t aCRC, uint8_t aDataByte) {
-	return _crc_ccitt_update(aCRC, aDataByte);
+static uint16_t crc_calc_byte(uint16_t crc_value, uint8_t data_byte) {
+	return _crc_ccitt_update(crc_value, data_byte);
 }
 
-static uint16_t crc_calc_data(uint16_t aInitialCRC, const void *aData, uint8_t aLength) {
-	uint16_t crc = aInitialCRC;
-	for (uint8_t i = 0; i < aLength; i++) {
-		crc = crc_calc_byte(crc, ((uint8_t*)aData)[i]);
+static uint16_t crc_calc_data(uint16_t crc_init_value, const void *data, uint8_t length) {
+	uint16_t crc = crc_init_value;
+	for (uint8_t i = 0; i < length; i++) {
+		crc = crc_calc_byte(crc, ((uint8_t*)data)[i]);
 	}
 	return crc;
 }
@@ -53,42 +53,42 @@ uint16_t crc_test(const uint8_t *a, uint8_t b) {
 	return crc_calc_data(CRC_INITIAL_VALUE, a, b);
 }
 
-void spi_tx_fill_crc(void *aData, uint8_t aMasterLength) {
-	uint16_t crcValue = crc_calc_byte(CRC_INITIAL_VALUE, ((uint8_t*)aData)[0]);
-	crcValue = crc_calc_data(crcValue, (uint8_t*)aData + 3, aMasterLength - 3);
-	*((uint16_t*)(aData + 1)) = crcValue;
+void spi_tx_fill_crc(void *data, uint8_t master_length) {
+	uint16_t crcValue = crc_calc_byte(CRC_INITIAL_VALUE, ((uint8_t*)data)[0]);
+	crcValue = crc_calc_data(crcValue, (uint8_t*)data + 3, master_length - 3);
+	*((uint16_t*)(data + 1)) = crcValue;
 }
 
-void spi_tx_pause(void *aData, uint8_t aLength, uint8_t aPauseAfterByteCount, uint16_t aDelayMicros) {
-	uint8_t *data = (uint8_t*)aData;
-	for (uint8_t i = 0; i < aLength; i++) {
-		if (i == aPauseAfterByteCount) {
-			delayMicroseconds(aDelayMicros);
+void spi_tx_pause(void *vdata, uint8_t length, uint8_t pause_after_byte_count, uint16_t delay_microseconds) {
+	uint8_t *data = (uint8_t*)vdata;
+	for (uint8_t i = 0; i < length; i++) {
+		if (i == pause_after_byte_count) {
+			delayMicroseconds(delay_microseconds);
 		}
 		uint8_t rxByte = spi_tx_byte(data[i]);
-		if (i >= aPauseAfterByteCount) {
+		if (i >= pause_after_byte_count) {
 			data[i] = rxByte;
 		}
 		delayMicroseconds(15);
 	}
 }
 
-static bool spi_tx_to_slave_raw(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros) {
-	spi_tx_fill_crc(aData, aMasterLength);
+static bool spi_tx_to_slave_raw(void *data, uint8_t length, uint8_t master_length, uint16_t delay_microseconds) {
+	spi_tx_fill_crc(data, master_length);
 
 	Frontpanel_SS_SetActive();
-	spi_tx_pause(aData, aLength, aMasterLength, aDelayMicros);
+	spi_tx_pause(data, length, master_length, delay_microseconds);
 	Frontpanel_SS_SetInactive();
 
-	uint16_t rxCRC = crc_calc_data(CRC_INITIAL_VALUE, aData + aMasterLength, aLength - aMasterLength - 2);
-	bool receivedOK = *((uint16_t*)(aData + aLength - 2)) == rxCRC;
+	uint16_t rx_crc = crc_calc_data(CRC_INITIAL_VALUE, data + master_length, length - master_length - 2);
+	bool received_ok = *((uint16_t*)(data + length - 2)) == rx_crc;
 
-	return receivedOK;
+	return received_ok;
 }
 
-bool spi_tx_to_slave(void *aData, uint8_t aLength, uint8_t aMasterLength, uint16_t aDelayMicros) {
-	for (uint8_t tryNo = 0; tryNo < 3; tryNo++) {
-		bool success = spi_tx_to_slave_raw(aData, aLength, aMasterLength, aDelayMicros);
+bool spi_tx_to_slave(void *data, uint8_t length, uint8_t master_length, uint16_t delay_microseconds) {
+	for (uint8_t try_no = 0; try_no < 3; try_no++) {
+		bool success = spi_tx_to_slave_raw(data, length, master_length, delay_microseconds);
 		if (success) {
 			return true;
 		}

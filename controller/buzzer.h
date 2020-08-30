@@ -8,7 +8,7 @@ enum buzzer_melody_t {
 };
 
 /*************** AUTO GENERATED SECTION FOLLOWS ***************/
-void buzzer_play(enum buzzer_melody_t aTone);
+void buzzer_play(enum buzzer_melody_t melody);
 void init_buzzer(void);
 /***************  AUTO GENERATED SECTION ENDS   ***************/
 
