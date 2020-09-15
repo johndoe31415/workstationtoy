@@ -14,6 +14,7 @@
 #include "frontpanel.h"
 #include "buzzer.h"
 #include "gui.h"
+#include "voltage.h"
 
 int main(void) {
 	initHAL();
@@ -21,6 +22,7 @@ int main(void) {
 	init_spi();
 	init_buzzer();
 	init_frontpanel();
+	init_voltage();
 
 	/* Then activate interrupts */
 	sei();

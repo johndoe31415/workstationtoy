@@ -1,7 +1,7 @@
 /* Automatically generated HAL from hal.xml */
 /* NEVER EDIT MANUALLY */
 
-/* Generated on: 2020-08-24 10:59:16 */
+/* Generated on: 2020-08-30 14:11:08 */
 
 #ifndef __HAL_H__
 #define __HAL_H__
@@ -517,6 +517,21 @@
 #define Voltmeter_IsActive()                     (Voltmeter_Get() != 0)
 #define Voltmeter_Init()                         { Voltmeter_SetInactive(); Voltmeter_ModeOutput(); }
 
+/* Rotary -> PA2 (Input, Initially Pullup On) */
+#define Rotary_BIT                               2
+#define Rotary_PIN                               PINA
+#define Rotary_PORT                              PORTA
+#define Rotary_DDR                               DDRA
+#define Rotary_SetPullupActive()                 Rotary_PORT |= _BV(Rotary_BIT)
+#define Rotary_SetPullupInactive()               Rotary_PORT &= ~_BV(Rotary_BIT)
+#define Rotary_ModeInput()                       Rotary_DDR &= ~_BV(Rotary_BIT)
+#define Rotary_IsInput()                         ((Rotary_DDR & _BV(Rotary_BIT)) == 0)
+#define Rotary_Get()                             (Rotary_PIN & _BV(Rotary_BIT))
+#define Rotary_GetBit()                          (Rotary_Get() >> Rotary_BIT)
+#define Rotary_IsInactive()                      (Rotary_Get() == 0)
+#define Rotary_IsActive()                        (Rotary_Get() != 0)
+#define Rotary_Init()                            { Rotary_SetPullupActive(); Rotary_ModeInput(); }
+
 /* Switch_On -> PF3 (Input, Initially Pullup On, Active-Low) */
 #define Switch_On_BIT                            3
 #define Switch_On_PIN                            PINF
@@ -630,6 +645,7 @@
 		Output5V_Init();\
 		Buzzer_Init();\
 		Voltmeter_Init();\
+		Rotary_Init();\
 		Switch_On_Init();\
 		Switch_Off_Init();\
 		Switch_EmergencyOff_Init();\

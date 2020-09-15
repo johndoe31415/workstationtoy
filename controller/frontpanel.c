@@ -33,6 +33,10 @@ static const struct led_pattern_t patterns[] PROGMEM = {
 		.green	= 0xf0f0,
 		.red	= 0xf0f0,
 	},
+	[STATE_BLINK_RED_MEDIUM] = {
+		.green	= 0x0000,
+		.red	= 0xcccc,
+	},
 	[STATE_BLINK_RED_FAST] = {
 		.green	= 0x0000,
 		.red	= 0xaaaa,

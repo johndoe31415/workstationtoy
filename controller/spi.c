@@ -30,13 +30,6 @@ static uint8_t spi_tx_byte(uint8_t byte) {
 	return SPDR;
 }
 
-static void spi_tx(void *vdata, uint8_t length) {
-	uint8_t *data = (uint8_t*)vdata;
-	for (uint8_t i = 0; i < length; i++) {
-		data[i] = spi_tx_byte(data[i]);
-	}
-}
-
 static uint16_t crc_calc_byte(uint16_t crc_value, uint8_t data_byte) {
 	return _crc_ccitt_update(crc_value, data_byte);
 }

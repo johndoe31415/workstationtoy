@@ -138,6 +138,10 @@
 		<description value="Voltmeter" />
 	</portpin>
 
+	<portpin name="PA2" template="digswitchinputinv">
+		<description value="Rotary" />
+	</portpin>
+
 	<portpin name="PF3" template="digswitchinput">
 		<description value="Switch_On" />
 	</portpin>

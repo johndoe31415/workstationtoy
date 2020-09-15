@@ -11,7 +11,8 @@ enum led_state_t {
 	STATE_RED = 2,
 	STATE_ORANGE = 3,
 	STATE_BLINK_ORANGE_SLOW = 4,
-	STATE_BLINK_RED_FAST = 5,
+	STATE_BLINK_RED_MEDIUM = 5,
+	STATE_BLINK_RED_FAST = 6,
 };
 
 struct btn_event_t {
